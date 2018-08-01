@@ -1,13 +1,15 @@
-const createError = require('http-errors');
-const FileStreamRotator = require('file-stream-rotator');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const fs = require('fs');
+import createError from 'http-errors';
+import FileStreamRotator from 'file-stream-rotator';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
+import fs from 'fs';
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+import indexRouter from './routes/index';
+import usersRouter from './routes/users';
+
+import './getData';
 
 const app = express();
 
@@ -16,12 +18,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // 自定义token
-logger.token('from', function(req, res){
+morgan.token('from', function(req, res){
     return req.query.from || '-';
 });
 
-/*const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'});*/
-logger.format('dev', '[dev] :method :url :status :res[content-length] - :response-time ms');
+morgan.format('dev', '[dev] :date[iso] :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms');
 
 const logDirectory = path.join(__dirname, 'log');
 
@@ -36,7 +37,7 @@ const accessLogStream = FileStreamRotator.getStream({
     verbose: false
 });
 
-app.use(logger('dev', {stream: accessLogStream}));
+app.use(morgan('dev', {stream: accessLogStream}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

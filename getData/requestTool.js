@@ -3,26 +3,29 @@ const cheerio = require("cheerio");
 const iconv = require("iconv-lite");
 const fs = require("fs");
 
+const mysql = require('../shared/mysql');
+
+const linkSql = new mysql();
+
 const action = 'https://wiki.52poke.com';
 
 const url = '/wiki/%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8';
 
 requestDateList(url).then(data => {
-    console.log(data);
     console.log('结束');
 }).catch(error => {
     console.log(error)
 });
 
 
-async function requestDateList(url) {
+function requestDateList(url) {
 
-    return await startRequest(url, proving);
+    return startRequest(url, proving);
 }
 
 // 开始爬取页面
 function startRequest(x, cb) {
-    console.log('开始');
+
     const src = `${action}${x}`;
 
     const options = {
@@ -62,7 +65,7 @@ async function proving($) {
     for (let a = 0; a < title.length; a++) {
         const text = $(title[a]).text();
         if (text.indexOf('特性') !== -1) {
-            list[`ability-${a}`] = await requestDate($, title[a]);
+            list[`ability-${a}`] = await requestDate($, title[a], a + 3);
         }
     }
 
@@ -70,13 +73,14 @@ async function proving($) {
 }
 
 // 数据整合
-async function requestDate($, table) {
+async function requestDate($, table, generation) {
     const tableList = $(table).next();
     const data = [];
 
     const tr = $(tableList).find('tr');
 
     for (let a = 0; a < tr.length; a++) {
+    // for (let a = 0; a < 2; a++) {
         const td = $(tr[a]).find('td');
         const abilityList = {};
 
@@ -84,14 +88,22 @@ async function requestDate($, table) {
             for (let i = 0; i < td.length; i++) {
                 if (!!getName(i)) {
                     if (i === 1) {
-                        abilityList['href'] = $(td[i]).find('a').attr('href');
-                        const childData = await startRequest($(td[i]).find('a').attr('href'), provingChild);
-                        console.log(childData);
-                    }
 
+                        const info = await startRequest($(td[i]).find('a').attr('href'), provingChild);
+
+                        Object.assign(abilityList, info);
+                    }
                     abilityList[getName(i)] = $(td[i]).text().replace(/[\r\n]/g, '');
                 }
             }
+
+            abilityList['generation'] = generation;
+
+            const  addSql = 'INSERT INTO ability_list(ability_id, china_name, japan_name, english_name, generation, in_war, out_war, in_tips, out_tips, warn_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), generation = VALUES(generation), in_war = VALUES(in_war), out_war = VALUES(out_war), in_tips = VALUES(in_tips), out_tips = VALUES(out_tips), warn_info = VALUES(warn_info)';
+
+            const param = setParam(abilityList);
+
+            linkSql.append_data(addSql, param);
 
             data.push(abilityList);
         }
@@ -99,6 +111,37 @@ async function requestDate($, table) {
 
     return data;
 }
+
+function setParam(param) {
+    const arr = new Array(10);
+
+    for (let i = 0; i < arr.length; i++) {
+        if (i === 0) {
+            arr[i] = parseInt(param['id']);
+        } else if (i === 1) {
+            arr[i] = param['chinaName'];
+        } else if (i === 2) {
+            arr[i] = param['japanName'];
+        } else if (i === 3) {
+            arr[i] = param['englishName'];
+        } else if (i === 4) {
+            arr[i] = param['generation'];
+        } else if (i === 5) {
+            arr[i] = param['inWar'];
+        } else if (i === 6) {
+            arr[i] = param['outWar'] ? param['outWar'] : null;
+        } else if (i === 7) {
+            arr[i] = param['inTips'] ? JSON.stringify(param['inTips']) : null;
+        } else if (i === 8) {
+            arr[i] = param['outTips'] ? JSON.stringify(param['outTips']) : null;
+        } else {
+            arr[i] = param['warn'] ? param['warn'] : null;
+        }
+    }
+
+    return arr;
+}
+
 
 function getName(index) {
     switch (index) {
@@ -118,21 +161,59 @@ function getName(index) {
 function provingChild($) {
     const title = $('h3');
 
-    console.log('开始子级');
+    const info = {};
 
     for (let i = 0; i < title.length; i++) {
         const battle = $(title[i]).text().replace(/[\r\n]/g, '');
 
-        if (battle === '对战中') {
-            console.log(battle);
-            const child = $(title[i]).next('p');
-            console.log($(child).text());
-        } else if (battle === '对战外') {
-            console.log(battle);
-            const child = $(title[i]).next('p');
-            console.log($(child).text());
+        if (battle === '对战中' || battle === '对战外') {
+
+            Object.assign(info, findChild($, $(title[i]), battle, info));
+
         }
     }
 
-    return '098';
+    return info;
+}
+
+function findChild($, father, battle, info) {
+
+    const child = $(father).next();
+
+    if ($(child).prop("tagName") === 'P') {
+
+        const flag = battle === '对战中' ? 'inWar' : 'outWar';
+
+        if (info.hasOwnProperty(flag)) {
+            info['warn'] = $(child).text().replace(/[\r\n]/g, '');
+        } else {
+            info[flag] = $(child).text().replace(/[\r\n]/g, '');
+        }
+
+        findChild($, child, battle, info);
+
+    } else if($(child).prop("tagName") === 'UL') {
+
+        const childLi = $(child).find('li');
+
+        for (let i = 0; i < childLi.length; i++) {
+
+            const flag = battle === '对战中' ? 'inTips' : 'outTips';
+
+            info[flag] = [];
+
+            info[flag].push($(childLi).text().replace(/[\r\n]/g, ''));
+        }
+
+
+        findChild($, child, battle, info);
+    } else if($(child).prop("tagName") === 'DL') {
+
+        findChild($, child, battle, info);
+    } else {
+
+        return info;
+
+    }
+
 }

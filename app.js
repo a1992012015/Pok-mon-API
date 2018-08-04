@@ -1,3 +1,11 @@
+/**
+ * Created by 圆环之理 on 2018/8/4.
+ *
+ * 功能：项目入口
+ *
+ */
+'use strict';
+
 const createError = require("http-errors");
 const FileStreamRotator = require("file-stream-rotator");
 const express = require("express");
@@ -9,7 +17,11 @@ const fs = require("fs");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
-require("./getData/requestTool");
+// 爬取特性列表信息
+// 已爬取完成
+// require("./getData/requestAbility");
+
+require("./getData/requestProp");
 
 
 const app = express();

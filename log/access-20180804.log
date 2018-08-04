@@ -1,0 +1,5 @@
+[dev] 2018-08-04T08:14:06.386Z ::1 - GET / HTTP/1.1 200 278 - 1936.265 ms
+[dev] 2018-08-04T08:14:07.363Z ::1 - GET /stylesheets/style.css HTTP/1.1 200 119 - 3.054 ms
+[dev] 2018-08-04T08:14:07.578Z ::1 - GET /images/favicon.ico HTTP/1.1 404 1026 - 40.554 ms
+[dev] 2018-08-04T08:14:09.684Z ::1 - GET / HTTP/1.1 304 - - 18.204 ms
+[dev] 2018-08-04T08:14:09.694Z ::1 - GET /stylesheets/style.css HTTP/1.1 304 - - 1.022 ms

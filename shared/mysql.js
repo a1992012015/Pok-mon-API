@@ -1,3 +1,11 @@
+/**
+ * Created by 圆环之理 on 2018/8/4.
+ *
+ * 功能：链接Mysql
+ *
+ */
+'use strict';
+
 const mysql  = require('mysql');
 
 const connection = mysql.createConnection({

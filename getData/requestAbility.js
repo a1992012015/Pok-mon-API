@@ -1,60 +1,30 @@
-const request = require("request");
-const cheerio = require("cheerio");
-const iconv = require("iconv-lite");
-const fs = require("fs");
+/**
+ * Created by 圆环之理 on 2018/8/4.
+ *
+ * 功能：爬取特性列表
+ *
+ */
+'use strict';
 
+const GetDataShared = require('./getDataShared');
 const mysql = require('../shared/mysql');
 
 const linkSql = new mysql();
-
-const action = 'https://wiki.52poke.com';
+const getDataShared = new GetDataShared();
 
 const url = '/wiki/%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8';
 
 requestDateList(url).then(data => {
+    console.log(data);
     console.log('结束');
 }).catch(error => {
     console.log(error)
 });
 
-
 function requestDateList(url) {
 
-    return startRequest(url, proving);
-}
+    return getDataShared.startRequest(url, proving);
 
-// 开始爬取页面
-function startRequest(x, cb) {
-
-    const src = `${action}${x}`;
-
-    const options = {
-        method: 'get',
-        url: src,
-        encoding: null,
-        gzip: true,
-    };
-
-    // 采用http模块向服务器发起一次get请求
-    return new Promise((resolve, reject) => {
-        request(options, async function(err, response, body) {
-            if (!err && response.statusCode === 200) {
-
-                // 转换编码格式
-                const html = iconv.decode(body, 'UTF-8');
-
-                // 解析页面
-                let $ = cheerio.load(html);
-
-                const data = await cb($);
-
-                resolve(data);
-            } else {
-                console.log('get page error url => ' + err);
-                reject(err)
-            }
-        });
-    });
 }
 
 // 解析父级
@@ -80,7 +50,6 @@ async function requestDate($, table, generation) {
     const tr = $(tableList).find('tr');
 
     for (let a = 0; a < tr.length; a++) {
-    // for (let a = 0; a < 2; a++) {
         const td = $(tr[a]).find('td');
         const abilityList = {};
 
@@ -89,7 +58,7 @@ async function requestDate($, table, generation) {
                 if (!!getName(i)) {
                     if (i === 1) {
 
-                        const info = await startRequest($(td[i]).find('a').attr('href'), provingChild);
+                        const info = await getDataShared.startRequest($(td[i]).find('a').attr('href'), provingChild);
 
                         Object.assign(abilityList, info);
                     }
@@ -103,7 +72,10 @@ async function requestDate($, table, generation) {
 
             const param = setParam(abilityList);
 
-            linkSql.append_data(addSql, param);
+            // 插入数据库
+            // linkSql.append_data(addSql, param);
+
+            console.log(abilityList);
 
             data.push(abilityList);
         }
@@ -141,7 +113,6 @@ function setParam(param) {
 
     return arr;
 }
-
 
 function getName(index) {
     switch (index) {
@@ -205,7 +176,6 @@ function findChild($, father, battle, info) {
             info[flag].push($(childLi).text().replace(/[\r\n]/g, ''));
         }
 
-
         findChild($, child, battle, info);
     } else if($(child).prop("tagName") === 'DL') {
 
@@ -215,5 +185,4 @@ function findChild($, father, battle, info) {
         return info;
 
     }
-
 }

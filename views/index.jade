@@ -1,6 +1,85 @@
 extends layout
 
+head
+    block title
+        title Article Title
+
 block content
-  h1= title
-  p Welcome to #{title}
-  div Hello #{name}
+    h1 #{title}
+    p Welcome to #{title}
+    div Hello #{name}
+
+    - var user = { description: `我喜欢${name}` }
+    #user
+        h2 描述
+        if user.description
+            p.description= user.description
+        else
+            p.description 用户无描述
+
+    - var user = { name: name, isVip: false }
+    unless user.isVip
+        p 亲爱的 #{user.name} 您并不是 VIP
+
+    - var list = [name, '李丹', '贺静']
+    ul
+        each val, index in list
+            li= index + ': ' + val
+
+    ul
+        each val, index in {1: name, 2: '李丹', 3: '贺静'}
+            li.name= index + ': ' + val
+
+    - var friends = 4
+    case friends
+        when 0: p you have no friends
+        when 1: p you have a friend
+        default: p you have #{friends} friends
+
+    script.
+        var test = 9;
+        if (test) {
+            console.log('you are awesome')
+        } else {
+            console.log('use jade')
+        }
+
+    //- 申明可重用的块
+    mixin pets(pets)
+        ul.pets
+            - each pet in pets
+                li= pet
+
+    //- 调用
+    +pets(list)
+    +pets(list)
+
+    mixin article(title)
+        .article
+            .article-wrapper
+                h1= title
+                //- block 为 jade 关键字代表外部传入的块
+                if block
+                    block
+                else
+                    p 该文章没有内容
+
+    +article('Hello world')
+
+    +article('Hello Jade')
+        p 这里是外部传入的块
+        p 再写两句
+        p 再写两句
+
+    mixin link(href, name)
+        a(class!=attributes.class, href=href)= name
+
+    +link('/foo', 'foo')(class="btn")
+
+    ul
+        each val, index in data
+            li
+                a(href= `/child?id=${val.ability_id}`)= `${val.ability_id}--${val.china_name}--${val.In_war}`
+
+block scripts
+    script(src='/js/layout.js')

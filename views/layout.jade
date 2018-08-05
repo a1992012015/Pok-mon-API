@@ -1,8 +1,14 @@
 doctype html
-html
+html(lang='zh')
     head
-        title= title
+        block title
+            title Default title
         link(rel='stylesheet', href='/stylesheets/style.css')
         link(rel='icon', href='/images/favicon.ico', type='image/x-icon')
+        script(src='/js/jquery-3.3.1.min.js')
+
 body
     block content
+
+
+block scripts

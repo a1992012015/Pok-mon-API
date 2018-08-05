@@ -1,0 +1,54 @@
+extends layout
+
+block title
+    title Article Title
+
+block content
+
+    h1
+        a(href= '/')= '返回'
+
+    div.text
+        p= '特性id'
+        p= data.ability_id
+
+    div.text
+        p= '中文名称'
+        p= data.china_name
+
+    div.text
+        p= '日文名称'
+        p= data.japan_name
+
+    div.text
+        p= '英文名称'
+        p= data.english_name
+
+    div.text
+        p= '第几代引入'
+        p= data.generation
+
+    div.text
+        p= '在对战中'
+        p= data.In_war
+
+    if (data.in_tips)
+        div.text
+            ul
+                each val in data.in_tips
+                    li= val
+
+    if (data.out_war)
+        div.text
+            p= '在对战外'
+            p= data.out_war
+
+    if (data.out_tips)
+        div.text
+            ul
+                each val in data.out_tips
+                    li= val
+
+    if (data.warn_info)
+        div.text
+            p= data.warn_info

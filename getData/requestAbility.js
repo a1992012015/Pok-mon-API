@@ -14,14 +14,14 @@ const getDataShared = new GetDataShared();
 
 const url = '/wiki/%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8';
 
-requestDateList(url).then(data => {
+requestDateList().then(data => {
     console.log(data);
     console.log('结束');
 }).catch(error => {
     console.log(error)
 });
 
-function requestDateList(url) {
+function requestDateList() {
 
     return getDataShared.startRequest(url, proving);
 

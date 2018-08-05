@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120px" height="64px" viewBox="0 0 120 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.2 (51160) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M0,7.99240541 C0,3.57832179 3.57494774,0 8.00079513,0 L29.9992049,0 C34.417922,0 38,3.57766074 38,7.99240541 L38,24.0075946 C38,28.4216782 34.4250523,32 29.9992049,32 L8.00079513,32 C3.582078,32 0,28.4223393 0,24.0075946 L0,7.99240541 Z M14,9 C12.3431458,9 11,10.3431458 11,12 L11,19.4736842 C11,21.1305385 12.3431458,22.4736842 14,22.4736842 L24,22.4736842 C25.6568542,22.4736842 27,21.1305385 27,19.4736842 L27,12 C27,10.3431458 25.6568542,9 24,9 L14,9 Z" id="path-1"></path>
+    </defs>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="V3_404" transform="translate(-662.000000, -422.000000)">
+            <g id="Group" transform="translate(427.000000, 306.000000)">
+                <g id="Group-3" transform="translate(235.000000, 114.000000)">
+                    <text id="4" font-family="OpenSans-Extrabold, Open Sans" font-size="40" font-weight="600" fill="#4384F5">
+                        <tspan x="9" y="63">4</tspan>
+                    </text>
+                    <g id="icon_0" transform="translate(40.000000, 32.000000)">
+                        <g id="Combined-Shape">
+                            <use fill="#F4CD3B" fill-rule="evenodd" xlink:href="#path-1"></use>
+                            <path stroke="#D8B141" stroke-width="2" d="M1,7.99240541 L1,24.0075946 C1,27.8695784 4.13388668,31 8.00079513,31 L29.9992049,31 C33.8704019,31 37,27.8717579 37,24.0075946 L37,7.99240541 C37,4.1304216 33.8661133,1 29.9992049,1 L8.00079513,1 C4.12959809,1 1,4.12824206 1,7.99240541 Z M14,8 L24,8 C26.209139,8 28,9.790861 28,12 L28,19.4736842 C28,21.6828232 26.209139,23.4736842 24,23.4736842 L14,23.4736842 C11.790861,23.4736842 10,21.6828232 10,19.4736842 L10,12 C10,9.790861 11.790861,8 14,8 Z"></path>
+                        </g>
+                    </g>
+                    <text id="4" font-family="OpenSans-Extrabold, Open Sans" font-size="40" font-weight="600" fill="#4384F5">
+                        <tspan x="85" y="63">4</tspan>
+                    </text>
+                    <text id="Oh!" font-family="PingFangSC-Semibold, PingFang SC" font-size="16" font-weight="500" fill="#4384F5">
+                        <tspan x="78.52" y="17">Oh!</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

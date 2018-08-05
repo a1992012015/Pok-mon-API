@@ -8,15 +8,34 @@
 
 const mysql  = require('mysql');
 
-const connection = mysql.createConnection({
-    host     : '119.27.168.74',
-    user     : 'root',
-    password : 'mengyehuanyu123.',
-    port: '3306',
-    database: 'pokemon'
-});
+let connection;
 
-connection.connect();
+function connect () {
+    connection = mysql.createConnection({
+        host     : '119.27.168.74',
+        user     : 'root',
+        password : 'mengyehuanyu123.',
+        port: '3306',
+        database: 'pokemon'
+    });
+    connection.connect(handleError);
+    connection.on('error', handleError);
+}
+
+// mysql错误处理
+function handleError (err) {
+    if (err) {
+        // 如果是连接断开，自动重新连接
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            connect();
+        } else {
+            console.error(err.stack || err);
+        }
+    }
+}
+
+// 启动连接
+connect();
 
 class servicesMysql {
 
@@ -30,15 +49,17 @@ class servicesMysql {
      */
     query_data(listName) {
         const  sql = `SELECT * FROM ${listName}`;
-        connection.query(sql,function (err, result) {
-            if(err){
-                console.log('[SELECT ERROR] - ',err.message);
-                return;
-            }
-            console.log('--------------------------SELECT----------------------------');
-            // console.log(result);
-            // console.log('------------------------------------------------------------\n\n');
-            return result;
+        return new Promise((resolve, reason) => {
+            connection.query(sql, function (err, result) {
+                if(err){
+                    console.log('[SELECT ERROR] - ', err.message);
+                    reason(err.message);
+                    return;
+                }
+                console.log('--------------------------SELECT----------------------------');
+                // console.log('------------------------------------------------------------\n\n');
+                resolve(result);
+            });
         });
     };
 
@@ -53,12 +74,15 @@ class servicesMysql {
     query_specify_data (listName, paramName, id) {
         const  sql = `SELECT * FROM ${listName} WHERE ${paramName}=${id}`;
         //查询数据库
-        connection.query(sql,function (err, result) {
-            if(err){
-                console.log('[SELECT ERROR] - ',err.message);
-                return;
-            }
-            return result;
+        return new Promise((resolve, reason) => {
+            connection.query(sql, function (err, result) {
+                if(err){
+                    console.log('[SELECT ERROR] - ', err.message);
+                    reason(err.message);
+                    return;
+                }
+                resolve(result);
+            });
         });
     };
 
@@ -70,17 +94,12 @@ class servicesMysql {
      * @desc 根据sql语句插入数据，如果主键已存在就更新数据
      */
     append_data (sql, param) {
-
         connection.query(sql, param, function (err, result) {
             if(err){
                 console.log('[INSERT ERROR] - ',err.message);
                 return;
             }
-
             console.log('--------------------------INSERT----------------------------');
-            // console.log('INSERT ID:',result.insertId);
-            // console.log('INSERT ID:',result);
-            // console.log('-----------------------------------------------------------------\n\n');
         });
     };
 }

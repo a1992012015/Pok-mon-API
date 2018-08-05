@@ -96,6 +96,8 @@ function getName(index) {
             return 'japanName';
         case 3:
             return 'englishName';
+        case 4:
+            return 'explain';
         default:
             return '';
     }

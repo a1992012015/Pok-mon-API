@@ -15,13 +15,13 @@ const linkSql = new mysql();
 router.get('/', async function(req, res, next) {
     const { id } = req.query;
     const data = await linkSql.query_specify_data('ability_list', 'ability_id', id);
-    if (data[0].in_tips) {
+    if (data && data[0].in_tips) {
         data[0].in_tips = JSON.parse(data[0].in_tips);
     }
-    if (data[0].out_tips) {
+    if (data && data[0].out_tips) {
         data[0].out_tips = JSON.parse(data[0].out_tips);
     }
-    res.render('child', { data: data[0] });
+    res.render('child', { data: data ? data[0] : [] });
 });
 
 module.exports = router;

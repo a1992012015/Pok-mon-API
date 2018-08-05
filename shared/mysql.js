@@ -12,11 +12,11 @@ let connection;
 
 function connect () {
     connection = mysql.createConnection({
-        host     : '119.27.168.74',
-        user     : 'root',
-        password : 'mengyehuanyu123.',
+        host: '119.27.168.74',
+        user: 'root',
+        password: 'mengyehuanyu123.',
         port: '3306',
-        database: 'pokemon'
+        database: 'pokemon',
     });
     connection.connect(handleError);
     connection.on('error', handleError);
@@ -44,7 +44,6 @@ class servicesMysql {
     /**
      * @method
      * @param {string} listName 数据库表名称
-     * @returns {object} 表的全部数据
      * @desc 根据表名查询数据
      */
     query_data(listName) {
@@ -60,15 +59,17 @@ class servicesMysql {
                 // console.log('------------------------------------------------------------\n\n');
                 resolve(result);
             });
+        }).catch(error => {
+            console.log('查询全部的数据=>', error);
+            connect ()
         });
     };
 
     /**
      * @method
      * @param {string} listName 数据库表名称
-     * @param {string} paramName 数据库表名称
-     * @param {string} id 数据库表名称
-     * @returns {object} 表的全部数据
+     * @param {string} paramName 数据库键
+     * @param {string} id 数据库值
      * @desc 根据列表名和和参数名和id查询指定数据
      */
     query_specify_data (listName, paramName, id) {
@@ -83,6 +84,9 @@ class servicesMysql {
                 }
                 resolve(result);
             });
+        }).catch(error => {
+            console.log('获取指定数据=>', error);
+            connect ()
         });
     };
 

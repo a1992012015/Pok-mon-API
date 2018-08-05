@@ -1,8 +1,10 @@
-extends layout
+extends header
 
 head
     block title
         title Article Title
+    block scripts
+        script(src='/js/layout.js')
 
 block content
     h1 #{title}
@@ -78,8 +80,5 @@ block content
 
     ul
         each val, index in data
-            li
+            li.ability
                 a(href= `/child?id=${val.ability_id}`)= `${val.ability_id}--${val.china_name}--${val.In_war}`
-
-block scripts
-    script(src='/js/layout.js')

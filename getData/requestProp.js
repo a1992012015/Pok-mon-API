@@ -24,21 +24,18 @@ getDataShared.startRequest(url, proving).then(data => {
 async function proving($) {
     const title = $('.mw-parser-output').find('h3,h2');
     const list = [];
-
     for (let a = 0; a < title.length; a++) {
         const data = await appoint($, title[a]);
         if (data) {
             list.push(data);
         }
     }
-
     return list;
 }
 
 function appoint($, brother) {
     const child = $(brother).next();
     const text = $(brother).text();
-
     if (child.length) {
         if ($(child).prop("tagName") === 'TABLE') {
             return getData($, child, text);
@@ -55,13 +52,11 @@ function appoint($, brother) {
 async function getData($, table, text) {
     const TR = $(table).find('tr');
     const data = [];
-
     for (let i = 0; i < TR.length; i++) {
         const TD = $(TR[i]).find('td');
         const abilityList = {
             name: text,
         };
-
         if (TD.length) {
             for (let a = 0; a < TD.length; a++) {
                 if (!!getName(a)) {
@@ -69,7 +64,7 @@ async function getData($, table, text) {
                         const src = $(TD[a]).find('img').attr('data-url');
                         const alt = $(TD[a]).find('img').attr('alt');
                         if (alt !== '未知' && src) {
-                            // abilityList[getName(a)] = await getDataShared.savedImg(src);
+                            abilityList[getName(a)] = await getDataShared.savedImg(src);
                         }
                     } else {
                         if (a === 1) {

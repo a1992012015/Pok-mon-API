@@ -57,8 +57,8 @@ async function requestDate($, table, generation) {
             for (let i = 0; i < td.length; i++) {
                 if (!!getName(i)) {
                     if (i === 1) {
-
-                        const info = await getDataShared.startRequest($(td[i]).find('a').attr('href'), provingChild);
+                        const href = $(td[i]).find('a').attr('href').toString();
+                        const info = await getDataShared.startRequest(href, provingChild);
 
                         Object.assign(abilityList, info);
                     }
@@ -68,14 +68,14 @@ async function requestDate($, table, generation) {
 
             abilityList['generation'] = generation;
 
-            const  addSql = 'INSERT INTO ability_list(ability_id, china_name, japan_name, english_name, generation, in_war, out_war, in_tips, out_tips, warn_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), generation = VALUES(generation), in_war = VALUES(in_war), out_war = VALUES(out_war), in_tips = VALUES(in_tips), out_tips = VALUES(out_tips), warn_info = VALUES(warn_info)';
+            // const  addSql = 'INSERT INTO ability_list(ability_id, china_name, japan_name, english_name, generation, in_war, out_war, in_tips, out_tips, warn_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), generation = VALUES(generation), in_war = VALUES(in_war), out_war = VALUES(out_war), in_tips = VALUES(in_tips), out_tips = VALUES(out_tips), warn_info = VALUES(warn_info)';
 
-            const param = setParam(abilityList);
+            // const param = setParam(abilityList);
 
             // 插入数据库
             // linkSql.append_data(addSql, param);
 
-            console.log(abilityList);
+            // console.log(abilityList);
 
             data.push(abilityList);
         }
@@ -137,17 +137,19 @@ function provingChild($) {
     for (let i = 0; i < title.length; i++) {
         const battle = $(title[i]).text().replace(/[\r\n]/g, '');
 
-        if (battle === '对战中' || battle === '对战外') {
-
-            Object.assign(info, findChild($, $(title[i]), battle, info));
+        if (battle === '对战中') {
+            // findChild($, title[i], battle, info)
+            findChild2($, title[i], battle, info);
+            console.log('===================================');
+            // Object.assign(info, findChild($, $(title[i]), battle, info));
 
         }
     }
-
+    console.log(info);
     return info;
 }
 
-function findChild($, father, battle, info) {
+function findChild($, father, battle, info, mark) {
 
     const child = $(father).next();
 
@@ -156,12 +158,14 @@ function findChild($, father, battle, info) {
         const flag = battle === '对战中' ? 'inWar' : 'outWar';
 
         if (info.hasOwnProperty(flag)) {
-            info['warn'] = $(child).text().replace(/[\r\n]/g, '');
+            info['warn'] = {};
+            info['warn']['title'] = $(child).text().replace(/[\r\n]/g, '');
+            findChild($, child, battle, info, true);
         } else {
             info[flag] = $(child).text().replace(/[\r\n]/g, '');
+            findChild($, child, battle, info);
         }
 
-        findChild($, child, battle, info);
 
     } else if($(child).prop("tagName") === 'UL') {
 
@@ -169,11 +173,17 @@ function findChild($, father, battle, info) {
 
         for (let i = 0; i < childLi.length; i++) {
 
-            const flag = battle === '对战中' ? 'inTips' : 'outTips';
+            if (mark) {
+                info['warn']['title'] = [];
+                info['warn']['title'].push($(child).text().replace(/[\r\n]/g, ''));
+            } else {
+                const flag = battle === '对战中' ? 'inTips' : 'outTips';
 
-            info[flag] = [];
+                info[flag] = [];
 
-            info[flag].push($(childLi).text().replace(/[\r\n]/g, ''));
+                info[flag].push($(childLi).text().replace(/[\r\n]/g, ''));
+            }
+
         }
 
         findChild($, child, battle, info);
@@ -185,4 +195,54 @@ function findChild($, father, battle, info) {
         return info;
 
     }
+}
+
+function findChild2($, father, battle, info) {
+
+    const child = $(father).next();
+
+    if ($(child).prop("tagName") === 'P') {
+        const flag = battle === '对战中' ? 'inWar' : 'outWar';
+        info[flag] = $(child).text().replace(/[\r\n]/g, '');
+        findChildren($, child, info)
+    } else {
+        findChild2($, child, battle, info)
+    }
+
+
+}
+
+function findChildren($, child, info) {
+    const children = $(child).next();
+    const battle = $(children).text().replace(/[\r\n]/g, '');
+
+    if ($(children).prop("tagName") === 'H3' && battle === '对战外') {
+        findChild2($, children, '对战外', info);
+        return;
+    } else {
+        if ($(children).prop("tagName") === 'P') {
+
+            const flag = battle === '对战中' ? 'inTips' : 'outTips';
+            if (info.hasOwnProperty(flag)) {
+                info['warn'] = ($(children).text().replace(/[\r\n]/g, ''));
+            } else {
+                info[flag] = info[flag] ? info[flag] : {};
+                info[flag]['title'] = $(children).text().replace(/[\r\n]/g, '');
+            }
+
+        } else if ($(children).prop("tagName") === 'UL') {
+            const child2Li = $(children).find('li');
+            const flag = battle === '对战中' ? 'inTips' : 'outTips';
+            info[flag] = info[flag] ? info[flag] : {};
+            info[flag]['list'] = [];
+
+            for (let i = 0; i < child2Li.length; i++) {
+
+                info[flag]['list'].push($(child2Li[i]).text().replace(/[\r\n]/g, ''));
+            }
+        } else {
+            return;
+        }
+    }
+    findChildren($, children, info);
 }

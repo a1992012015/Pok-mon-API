@@ -24,7 +24,6 @@ const childRouter = require("./routes/child");
 
 // require("./getData/requestProp");
 
-
 const app = express();
 
 // view engine setup

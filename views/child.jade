@@ -30,26 +30,7 @@ block content
         p= data.generation
 
     div.text
-        p= '在对战中'
-        p= data.In_war
+        p= '游戏中描述'
+        p= data.info
 
-    if (data.in_tips)
-        div.text
-            ul
-                each val in data.in_tips
-                    li= val
-
-    if (data.out_war)
-        div.text
-            p= '在对战外'
-            p= data.out_war
-
-    if (data.out_tips)
-        div.text
-            ul
-                each val in data.out_tips
-                    li= val
-
-    if (data.warn_info)
-        div.text
-            p= data.warn_info
+    div!= data.detail_info

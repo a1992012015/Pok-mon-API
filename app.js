@@ -23,7 +23,7 @@ const requestProp = require("./getData/requestProp");// 爬取道具列表
 
 const app = express();
 
-// requestAbility();
+requestAbility();
 requestProp();
 
 // view engine setup

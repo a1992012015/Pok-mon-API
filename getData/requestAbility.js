@@ -19,7 +19,6 @@ const url = '/wiki/%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8';
  * @desc 启动和接受返回结果
  */
 module.exports = function (time = 604800) {
-    getDataShared.startRequest(url, proving);
     setTimeout(() => {
         getDataShared.startRequest(url, proving);
     }, time)
@@ -66,7 +65,7 @@ async function requestDate($, table, generation) {
                         const href = $(td[i]).find('a').attr('href').toString();
                         abilityList['detailInfo'] = await getDataShared.startRequest(href, provingChild);
                     }
-                    abilityList[getName(i)] = $(td[i]).text().replace(/[\r\n]/g, '');
+                    abilityList[getName(i)] = $(td[i]).text().trim();
                 }
             }
             abilityList['generation'] = generation;

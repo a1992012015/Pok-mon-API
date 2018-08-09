@@ -37,7 +37,7 @@ async function proving($) {
     const title = $('.mw-parser-output').find('h4,h3,h2');
     const list = [];
     for (let a = 0; a < title.length; a++) {
-        const text = $(title[a]).text().replace(/[\r\n]/g, '').toString();
+        const text = $(title[a]).text().trim().toString();
         const data = await appoint($, title[a], text);
         if (data) {
             list.push(data);
@@ -90,23 +90,26 @@ async function getData($, table, text) {
         const TD = $(TR[i]).find('td');
         const abilityList = {};
         if (TD.length >= 5) {
+            let alt;
             for (let a = 0; a < TD.length; a++) {
                 if (!!getName(a)) {
                     if (a === 0) {
                         const src = $(TD[a]).find('img').attr('data-url').toString();
-                        const alt = $(TD[a]).find('img').attr('alt');
-                        if (alt !== '未知' && src) {
-                            // abilityList[getName(a)] = await getDataShared.savedImg(src);
-                        }
-                        abilityList[getName(a)] = src;
+                        alt = $(TD[a]).find('img').attr('alt');
+                        abilityList[getName(a)] = `https:${src}`;
                     } else {
                         if (a === 1) {
                             const href = $(TD[a]).find('a').attr('href').toString();
                             abilityList['detailInfo'] = await getDataShared.startRequest(href, provingChild);
                         }
-                        abilityList[getName(a)] = $(TD[a]).text().replace(/[\r\n]/g, '');
+                        abilityList[getName(a)] = $(TD[a]).text().trim();
                     }
                 }
+            }
+            if (alt === '未知') {
+                abilityList['src'] = '/pokemon/prop/default.png'
+            } else {
+                abilityList['src'] = await getDataShared.savedImg(abilityList['src'], abilityList['englishName']);
             }
             abilityList['id'] = propIndex;
             const  addSql = 'INSERT INTO prop_list(prop_id, china_name, japan_name, english_name, info, detail_info, src) VALUES(?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), info = VALUES(info), detail_info = VALUES(detail_info), src = VALUES(src)';

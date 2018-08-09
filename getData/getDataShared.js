@@ -74,27 +74,28 @@ class GetDataShared {
     /**
      * @method
      * @param {string} url 图片地址
+     * @param {string} name 图片名称
      * @desc 把解析到的图片储存在本地
      */
-    savedImg(url) {
-        url = `http:${url}`;
+    savedImg(url, name) {
         return new Promise((resolve, reject) => {
-            request.head(url, (error, response, body) => {
-                console.log(body);
+            request.head(url, (error, response) => {
                 if (!error && response.statusCode === 200) {
                     const path = os.type().indexOf('Windows') !== -1 ?
                         // windows电脑
                         `C:/Users/45513/Pictures/images`
                         :
                         // linux电脑
-                        `/root/public/images`;
+                        `/home/ftpuser/www/pokemon/prop`;
                     // 如果没有文件夹就创建
                     if (!fs.existsSync(path)) {
                         fs.mkdirSync(path);
                     }
-                    const src = `${path}/${this.uuid()}.jpg`;
+                    name = `${name}${url.slice(url.lastIndexOf('.'), url.length)}`;
+                    const src = `${path}/${name}`;
                     request(url).pipe(fs.createWriteStream(src));
-                    resolve(src);
+                    const mySqlImg = `/pokemon/prop/${name}`;
+                    resolve(mySqlImg);
                 } else {
                     console.log('get img error url => ' + error);
                     reject(error)
@@ -116,7 +117,7 @@ class GetDataShared {
         let startIndex;
         let endIndex;
         for (let i = 0; i < title.length; i++) {
-            const battle = title.eq(i).text().replace(/[\r\n]/g, '').toString();
+            const battle = title.eq(i).text().trim().toString();
             if (battle === text) {
                 startIndex = i;
                 endIndex = i + 1;
@@ -141,11 +142,11 @@ class GetDataShared {
         if ($(html).prop('tagName') === 'UL') {
             const htmlUl = $(html).find('li');
             for (let i = 0; i < htmlUl.length; i++) {
-                const content = $(htmlUl[i]).text().replace(/[\r\n]/g, '');
+                const content = $(htmlUl[i]).text().trim();
                 $(htmlUl[i]).html(content);
             }
         } else {
-            const content = $(html).text().replace(/[\r\n]/g, '');
+            const content = $(html).text().trim();
             $(html).html(content);
         }
         return $(html).html($(html)).html();

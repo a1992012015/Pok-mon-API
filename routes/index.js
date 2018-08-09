@@ -14,8 +14,7 @@ const linkSql = new mysql();
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-    const data = await linkSql.query_data('ability_list');
-    res.render('index', { title: 'Express Hello', name: '赵春梅', data: data ? data : [] });
+    res.render('index', { title: 'Express Hello', name: '赵春梅' });
 });
 
 module.exports = router;

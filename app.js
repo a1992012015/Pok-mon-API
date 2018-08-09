@@ -16,14 +16,15 @@ const fs = require("fs");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
-const childRouter = require("./routes/child");
+const abilityRouter = require("./routes/ability");
+const propRouter = require("./routes/prop");
 const requestAbility = require("./getData/requestAbility");// 爬取特性列表信息
-
-// require("./getData/requestProp");
+const requestProp = require("./getData/requestProp");// 爬取道具列表
 
 const app = express();
 
-requestAbility();
+// requestAbility();
+requestProp();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -58,11 +59,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/child', childRouter);
+app.use('/ability', abilityRouter);
+app.use('/prop', propRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+    console.log('是否启动');
+    res.render('404');
+    // next(createError(404));
 });
 
 // error handler

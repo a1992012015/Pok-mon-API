@@ -15,16 +15,13 @@ const url = '/wiki/%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8';
 
 /**
  * @method
+ * @param {number} time 爬取页面的周期
  * @desc 启动和接受返回结果
  */
-module.exports = function requestAbility(time = 604800) {
+module.exports = function (time = 604800) {
     getDataShared.startRequest(url, proving);
     setTimeout(() => {
-        getDataShared.startRequest(url, proving).then(data => {
-            console.log('特性爬取结束');
-        }).catch(error => {
-            console.log(error)
-        });
+        getDataShared.startRequest(url, proving);
     }, time)
 };
 
@@ -75,7 +72,7 @@ async function requestDate($, table, generation) {
             abilityList['generation'] = generation;
             const  addSql = 'INSERT INTO ability_list(ability_id, china_name, japan_name, english_name, generation, info, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), generation = VALUES(generation), info = VALUES(info), detail_info = VALUES(detail_info)';
             let param = ['id', 'chinaName', 'japanName', 'englishName', 'generation', 'info', 'detailInfo'];
-            param = setParam(abilityList, param);
+            param = getDataShared.setParam(abilityList, param);
             // 插入数据库
             linkSql.append_data(addSql, param);
             console.log(`========================================${abilityList[getName(0)]}--${abilityList[getName(1)]}========================================`);
@@ -83,20 +80,6 @@ async function requestDate($, table, generation) {
         }
     }
     return data;
-}
-
-/**
- * @method
- * @param {Object} abilityList 每一条数据
- * @param {Array} param 需要排序成的数组
- * @returns {Array} 可以插入数据的结构顺序
- * @desc 将获取到的对象数据转换成可插入数据库的数组
- */
-function setParam(abilityList, param) {
-    param = param.map((item) => {
-        return abilityList[item];
-    });
-    return param;
 }
 
 /**
@@ -125,45 +108,9 @@ function getName(index) {
 /**
  * @method
  * @param {function} $ html解析的返回对象
- * @returns {string} 子级页面选取的数据
- * @desc 遍历子级页面寻找数据起点
+ * @returns {string} 子级页面返回的信息
+ * @desc 查找子级页面，根据需要查询的标签和文字，确定坐标，返回一段html
  */
 function provingChild($) {
-    const title = $('h2');
-    let startIndex;
-    let endIndex;
-    for (let i = 0; i < title.length; i++) {
-        const battle = title.eq(i).text().replace(/[\r\n]/g, '').toString();
-        if (battle === '特性效果') {
-            startIndex = i;
-            endIndex = i + 1;
-        }
-    }
-    const html = title.eq(startIndex).nextUntil(title.eq(endIndex));
-    let outerHTML = '';
-    for (let i = 0; i < html.length; i++) {
-        outerHTML += analysisHtml($, html.eq(i));
-    }
-    return outerHTML;
-}
-
-/**
- * @method
- * @param {function} $ html解析的返回对象
- * @param {jQuery} html 截取到的html结构
- * @returns {jQuery} 处理完毕的html字符串
- * @desc 处理截取到的html结构里面多余的标签和类名id
- */
-function analysisHtml($, html) {
-    if ($(html).prop('tagName') === 'UL') {
-        const htmlUl = $(html).find('li');
-        for (let i = 0; i < htmlUl.length; i++) {
-            const content = $(htmlUl[i]).text().replace(/[\r\n]/g, '');
-            $(htmlUl[i]).html(content);
-        }
-    } else {
-        const content = $(html).text().replace(/[\r\n]/g, '');
-        $(html).html(content);
-    }
-    return $(html).html($(html)).html();
+    return getDataShared.defineAddress($, 'h2', '特性效果');
 }

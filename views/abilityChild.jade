@@ -1,0 +1,48 @@
+extends header
+
+head
+    block title
+        title= data.china_name
+
+block content
+
+    h1
+        a(href= '/')= '返回'
+
+    div.Jump
+        div.left
+            if (data.ability_id !== 1)
+                a(href= `/ability/child?id=${data.ability_id - 1}`)= '上一个'
+            else
+                p= '这是第一条数据'
+        div.right
+            if (!lastFlag)
+                a(href= `/ability/child?id=${data.ability_id + 1}`)= '下一个'
+            else
+                p= '这是最后一条数据'
+
+    div.text
+        p= '特性id'
+        p= data.ability_id
+
+    div.text
+        p= '中文名称'
+        p= data.china_name
+
+    div.text
+        p= '日文名称'
+        p= data.japan_name
+
+    div.text
+        p= '英文名称'
+        p= data.english_name
+
+    div.text
+        p= '第几代引入'
+        p= data.generation
+
+    div.text
+        p= '游戏中描述'
+        p= data.info
+
+    div!= data.detail_info

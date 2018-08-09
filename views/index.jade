@@ -73,12 +73,8 @@ block content
         p 再写两句
         p 再写两句
 
-    mixin link(href, name)
-        a(class!=attributes.class, href=href)= name
-
-    +link('/foo', 'foo')(class="btn")
-
     ul
-        each val, index in data
-            li.ability
-                a(href= `/child?id=${val.ability_id}`)= `${val.ability_id}--${val.china_name}--${val.info}`
+        li
+            a(href= '/ability')= '特性列表'
+        li
+            a(href= '/prop')= '道具列表'

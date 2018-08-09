@@ -102,6 +102,68 @@ class GetDataShared {
             });
         });
     }
+
+    /**
+     * @method
+     * @param {function} $ html解析的返回对象
+     * @param {String} tag 需要解析的标签名字
+     * @param {String} text 需要查询的内容
+     * @returns {string} 子级页面选取的数据
+     * @desc 给定查询的标签和查询的字符串确定截取范围和空间
+     */
+    defineAddress($, tag, text) {
+        const title = $(tag);
+        let startIndex;
+        let endIndex;
+        for (let i = 0; i < title.length; i++) {
+            const battle = title.eq(i).text().replace(/[\r\n]/g, '').toString();
+            if (battle === text) {
+                startIndex = i;
+                endIndex = i + 1;
+            }
+        }
+        const html = title.eq(startIndex).nextUntil(title.eq(endIndex));
+        let outerHTML = '';
+        for (let i = 0; i < html.length; i++) {
+            outerHTML += this.analysisHtml($, html.eq(i));
+        }
+        return outerHTML;
+    }
+
+    /**
+     * @method
+     * @param {function} $ html解析的返回对象
+     * @param {jQuery} html 截取到的html结构
+     * @returns {jQuery} 处理完毕的html字符串
+     * @desc 处理截取到的html结构里面多余的标签和类名id
+     */
+    analysisHtml($, html) {
+        if ($(html).prop('tagName') === 'UL') {
+            const htmlUl = $(html).find('li');
+            for (let i = 0; i < htmlUl.length; i++) {
+                const content = $(htmlUl[i]).text().replace(/[\r\n]/g, '');
+                $(htmlUl[i]).html(content);
+            }
+        } else {
+            const content = $(html).text().replace(/[\r\n]/g, '');
+            $(html).html(content);
+        }
+        return $(html).html($(html)).html();
+    }
+
+    /**
+     * @method
+     * @param {Object} abilityList 每一条数据
+     * @param {Array} param 需要排序成的数组
+     * @returns {Array} 可以插入数据的结构顺序
+     * @desc 将获取到的对象数据转换成可插入数据库的数组
+     */
+    setParam(abilityList, param) {
+        param = param.map((item) => {
+            return abilityList[item];
+        });
+        return param;
+    }
 }
 
 module.exports = GetDataShared;

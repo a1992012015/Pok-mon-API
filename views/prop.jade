@@ -1,0 +1,11 @@
+extends header
+
+head
+    block title
+        title 道具列表
+
+block content
+    ul
+        each val in data
+            li.ability
+                a(href= `/prop/child?id=${val.prop_id}`)= `${val.prop_id}--${val.china_name}--${val.info}`

@@ -23,7 +23,7 @@ body {
 
 .Jump {
     overflow: hidden;
-    margin-top: 50px;
+    margin: 50px 10px 0;
 }
 
 .Jump .left {
@@ -36,4 +36,8 @@ body {
 
 .ability {
     margin: 10px 0;
+}
+
+.ability a {
+    text-decoration: none;
 }

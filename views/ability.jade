@@ -1,0 +1,11 @@
+extends header
+
+head
+    block title
+        title 特性列表
+
+block content
+    ul
+        each val in data
+            li.ability
+                a(href= `/ability/child?id=${val.ability_id}`)= `${val.ability_id}--${val.china_name}--${val.info}`

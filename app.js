@@ -17,14 +17,13 @@ const fs = require("fs");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const childRouter = require("./routes/child");
-
-// 爬取特性列表信息
-// 已爬取完成
-// require("./getData/requestAbility");
+const requestAbility = require("./getData/requestAbility");// 爬取特性列表信息
 
 // require("./getData/requestProp");
 
 const app = express();
+
+requestAbility();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

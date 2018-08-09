@@ -17,12 +17,17 @@ const url = '/wiki/%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8';
  * @method
  * @desc 启动和接受返回结果
  */
-getDataShared.startRequest(url, proving).then(data => {
-    console.log(data);
-    console.log('特性爬取结束');
-}).catch(error => {
-    console.log(error)
-});
+module.exports = function requestAbility(time = 604800) {
+    getDataShared.startRequest(url, proving);
+    setTimeout(() => {
+        getDataShared.startRequest(url, proving).then(data => {
+            console.log('特性爬取结束');
+        }).catch(error => {
+            console.log(error)
+        });
+    }, time)
+};
+
 
 /**
  * @method
@@ -161,61 +166,4 @@ function analysisHtml($, html) {
         $(html).html(content);
     }
     return $(html).html($(html)).html();
-}
-
-/**
- * @method
- * @param {function} $ html解析的返回对象
- * @param {jQuery} father 数据爬取起点
- * @param {string} battle 确认是对战中还是对战外的下标
- * @param {object} info 存储子级页面的数据
- * @desc 开始爬取子级页面的数据
- */
-function findChild($, father, battle, info) {
-    const child = $(father).next();
-    if ($(child).prop("tagName") === 'P') {
-        const flag = battle === '对战中' ? 'inWar' : 'outWar';
-        info[flag] = $(child).text().replace(/[\r\n]/g, '');
-        findChildren($, child, battle, info)
-    } else {
-        findChild($, child, battle, info)
-    }
-}
-
-/**
- * @method
- * @param {function} $ html解析的返回对象
- * @param {jQuery} child 数据爬取起点
- * @param {string} battle 确认是对战中还是对战外的下标
- * @param {object} info 存储子级页面的数据
- * @desc 区分对战中和对战外的数据
- */
-function findChildren($, child ,battle , info) {
-    const children = $(child).next();
-    const childrenBattle = $(children).text().replace(/[\r\n]/g, '').toString();
-    if ($(children).prop("tagName") === 'H3' && childrenBattle === '对战外') {
-        findChild($, children, childrenBattle, info);
-        return;
-    } else {
-        if ($(children).prop("tagName") === 'P') {
-            const flag = battle === '对战中' ? 'inTips' : 'outTips';
-            if (info.hasOwnProperty(flag)) {
-                info['warn'] = ($(children).text().replace(/[\r\n]/g, ''));
-            } else {
-                info[flag] = !!info[flag] ? info[flag] : {};
-                info[flag]['title'] = $(children).text().replace(/[\r\n]/g, '');
-            }
-        } else if ($(children).prop("tagName") === 'UL') {
-            const childLi = $(children).find('li');
-            const flag = battle === '对战中' ? 'inTips' : 'outTips';
-            info[flag] = !!info[flag] ? info[flag] : {};
-            info[flag]['list'] = [];
-            for (let i = 0; i < childLi.length; i++) {
-                info[flag]['list'].push($(childLi[i]).text().replace(/[\r\n]/g, ''));
-            }
-        } else {
-            return;
-        }
-    }
-    findChildren($, children ,battle , info);
 }

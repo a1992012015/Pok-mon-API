@@ -9,6 +9,18 @@ block content
     h1
         a(href= '/')= '返回'
 
+    div.Jump
+        div.left
+            if (data.ability_id !== 1)
+                a(href= `/child?id=${data.ability_id - 1}`)= '上一个'
+            else
+                p= '这是第一条数据'
+        div.right
+            if (!lastFlag)
+                a(href= `/child?id=${data.ability_id + 1}`)= '下一个'
+            else
+                p= '这是最后一条数据'
+
     div.text
         p= '特性id'
         p= data.ability_id

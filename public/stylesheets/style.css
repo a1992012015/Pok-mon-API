@@ -21,6 +21,19 @@ body {
     margin: 0 10px;
 }
 
+.Jump {
+    overflow: hidden;
+    margin-top: 50px;
+}
+
+.Jump .left {
+    float: left;
+}
+
+.Jump .right {
+    float: right;
+}
+
 .ability {
     margin: 10px 0;
 }

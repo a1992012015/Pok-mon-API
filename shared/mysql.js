@@ -92,6 +92,30 @@ class servicesMysql {
 
     /**
      * @method
+     * @param {string} listName 数据库表名称
+     * @param {string} paramName 数据库键
+     * @desc 根据列表名和和参数名查询最后一条数据
+     */
+    query_specify_last (listName, paramName) {
+        const  sql = `SELECT * FROM ${listName} ORDER BY ${paramName} DESC LIMIT 1`;
+        //查询数据库
+        return new Promise((resolve, reason) => {
+            connection.query(sql, function (err, result) {
+                if(err){
+                    console.log('[SELECT ERROR] - ', err.message);
+                    reason(err.message);
+                    return;
+                }
+                resolve(result);
+            });
+        }).catch(error => {
+            console.log('获取指定数据=>', error);
+            connect ()
+        });
+    };
+
+    /**
+     * @method
      * @param {string} sql 数据库表名称
      * @param {Array} param 数据库表名称
      * @returns {object} 是否成功

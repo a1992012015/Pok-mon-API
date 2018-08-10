@@ -14,17 +14,19 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const fs = require("fs");
 
+// 路由
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const abilityRouter = require("./routes/ability");
 const propRouter = require("./routes/prop");
-const requestAbility = require("./getData/requestAbility");// 爬取特性列表信息
-const requestProp = require("./getData/requestProp");// 爬取道具列表
+const moveRouter = require("./routes/move");
+
+// 爬取数据
+const requestData = require("./getData");
+
+requestData();
 
 const app = express();
-
-requestAbility();
-requestProp();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,6 +63,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/ability', abilityRouter);
 app.use('/prop', propRouter);
+app.use('/move', moveRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

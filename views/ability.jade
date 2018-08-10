@@ -5,7 +5,22 @@ head
         title 特性列表
 
 block content
+    h1
+        a(href= '/')= '返回'
+
     ul
         each val in data
             li.ability
                 a(href= `/ability/child?id=${val.ability_id}`)= `${val.ability_id}--${val.china_name}--${val.info}`
+
+    div.Jump
+        div.left
+            if (data.ability_id !== 1)
+                a(href= `/ability?offSet=${data.length - 11}&limit=9`)= '上一个'
+            else
+                p= '这是第一条数据'
+        div.right
+            if (!lastFlag)
+                a(href= `/ability?offSet=${offSet + 10}&limit=9`)= '下一个'
+            else
+                p= '这是最后一条数据'

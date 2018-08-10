@@ -2,7 +2,7 @@ extends header
 
 head
     block title
-        title 道具列表
+        title 特性列表
 
 block content
     h1
@@ -11,16 +11,16 @@ block content
     ul
         each val in data
             li.ability
-                a(href= `/prop/child?id=${val.prop_id}`)= `${val.prop_id}--${val.china_name}--${val.info}`
+                a(href= `/move/child?id=${val.move_id}`)= `${val.move_id}--${val.china_name}--${val.info}`
 
     div.Jump
         div.left
             if (data.ability_id !== 1)
-                a(href= `/prop?offSet=${data.length - 11}&limit=9`)= '上一个'
+                a(href= `/move?offSet=${data.length - 11}&limit=9`)= '上一个'
             else
                 p= '这是第一条数据'
         div.right
             if (!lastFlag)
-                a(href= `/prop?offSet=${offSet + 10}&limit=9`)= '下一个'
+                a(href= `/move?offSet=${offSet + 10}&limit=9`)= '下一个'
             else
                 p= '这是最后一条数据'

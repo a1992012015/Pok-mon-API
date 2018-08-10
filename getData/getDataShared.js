@@ -12,9 +12,12 @@ const iconv = require("iconv-lite");
 const fs = require("fs");
 const os = require('os');
 
-class GetDataShared {
+const Mysql = require('../shared/mysql');
+
+module.exports = class GetDataShared extends Mysql {
 
     constructor() {
+        super();
         this.action = 'https://wiki.52poke.com';
     };
 
@@ -41,11 +44,10 @@ class GetDataShared {
     /**
      * @method
      * @param {string} x 需要拉取的页面url
-     * @param {function} cb 一个如何解析页面的函数
      * @returns {object} 解析解析完成后的数据
      * @desc 拉取页面结构和信息
      */
-    startRequest(x, cb) {
+    startRequest(x) {
         const src = `${this.action}${x}`;
         const options = {
             method: 'get',
@@ -60,9 +62,8 @@ class GetDataShared {
                     // 转换编码格式
                     const html = iconv.decode(body, 'UTF-8');
                     // 解析页面
-                    let $ = cheerio.load(html);
-                    const data = await cb($);
-                    resolve(data);
+                    const $ = cheerio.load(html);
+                    resolve($);
                 } else {
                     console.log('get page error url => ' + err);
                     reject(err)
@@ -165,6 +166,70 @@ class GetDataShared {
         });
         return param;
     }
-}
 
-module.exports = GetDataShared;
+    /**
+     * @method
+     * @param {string} name 属性名称
+     * @returns {number || string} 返回名称对应的flag || 或者未知属性
+     * @desc 根据名字获取数据的flag
+     */
+    type(name) {
+        switch (name) {
+            case '一般':
+                return 0;
+            case '火':
+                return 1;
+            case '虫':
+                return 2;
+            case '水':
+                return 3;
+            case '毒':
+                return 4;
+            case '电':
+                return 5;
+            case '飞行':
+                return 6;
+            case '草':
+                return 7;
+            case '地面':
+                return 8;
+            case '冰':
+                return 9;
+            case '格斗':
+                return 10;
+            case '超能力':
+                return 11;
+            case '岩石':
+                return 12;
+            case '幽灵':
+                return 13;
+            case '龙':
+                return 14;
+            case '恶':
+                return 15;
+            case '钢':
+                return 16;
+            case '妖精':
+                return 17;
+            default:
+                return '???';
+        }
+    }
+
+    /**
+     * @method
+     * @param {string} name 招数伤害类型
+     * @returns {number} 返回上海类型对应的flag
+     * @desc 根据名字获取数据的flag
+     */
+    damage(name) {
+        switch (name) {
+            case '物理':
+                return 0;
+            case '特殊':
+                return 1;
+            default:
+                return 2;
+        }
+    }
+};

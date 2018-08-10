@@ -37,7 +37,7 @@ function handleError (err) {
 // 启动连接
 connect();
 
-class servicesMysql {
+module.exports = class ServicesMysql {
 
     constructor() { }
 
@@ -74,6 +74,33 @@ class servicesMysql {
      */
     query_specify_data (listName, paramName, id) {
         const  sql = `SELECT * FROM ${listName} WHERE ${paramName}=${id}`;
+        //查询数据库
+        return new Promise((resolve, reason) => {
+            connection.query(sql, function (err, result) {
+                if(err){
+                    console.log('[SELECT ERROR] - ', err.message);
+                    reason(err.message);
+                    return;
+                }
+                resolve(result);
+            });
+        }).catch(error => {
+            console.log('获取指定数据=>', error);
+            connect ()
+        });
+    };
+
+    /**
+     * @method
+     * @param {String} listName 数据库表名称
+     * @param {String} paramName 数据库键
+     * @param {Number} startId 数据库值
+     * @param {Number} endId 数据库值
+     * @desc 查询介于两个参数之间的数据
+     */
+    query_next_until_data (listName, paramName, startId, endId) {
+        // const  sql = `SELECT * FROM ${listName} WHERE ${paramName}=${startId}`;
+        const sql = `SELECT * FROM ${listName} WHERE ${paramName} BETWEEN ${startId} AND ${endId};`;
         //查询数据库
         return new Promise((resolve, reason) => {
             connection.query(sql, function (err, result) {
@@ -130,6 +157,4 @@ class servicesMysql {
             console.log('--------------------------INSERT----------------------------');
         });
     };
-}
-
-module.exports = servicesMysql;
+};

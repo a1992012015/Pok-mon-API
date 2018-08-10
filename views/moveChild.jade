@@ -11,21 +11,19 @@ block content
 
     div.Jump
         div.left
-            if (data.prop_id !== 1)
-                a(href= `/prop/child?id=${data.prop_id - 1}`)= '上一个'
+            if (data.move_id !== 1)
+                a(href= `/prop/child?id=${data.move_id - 1}`)= '上一个'
             else
                 p= '这是第一条数据'
         div.right
             if (!lastFlag)
-                a(href= `/prop/child?id=${data.prop_id + 1}`)= '下一个'
+                a(href= `/prop/child?id=${data.move_id + 1}`)= '下一个'
             else
                 p= '这是最后一条数据'
 
     div.text
         p= '特性id'
-        p= data.prop_id
-
-    img(src= data.src)
+        p= data.move_id
 
     div.text
         p= '中文名称'
@@ -37,10 +35,30 @@ block content
 
     div.text
         p= '英文名称'
+        p= data.type
+
+    div.text
+        p= '属性'
+        p= data.damage
+
+    div.text
+        p= '分类'
+        p= data.power
+
+    div.text
+        p= '威力'
         p= data.english_name
+
+    div.text
+        p= '命中'
+        p= data.accuracy
+
+    div.text
+        p= 'PP'
+        p= data.power_point
 
     div.text
         p= '游戏中描述'
         p= data.info
 
-    div!= data.detail_info
+    div!= data.detail

@@ -13,8 +13,12 @@ const mysql = require('../shared/mysql');
 const linkSql = new mysql();
 
 router.get('/', async function(req, res, next) {
-    const data = await linkSql.query_data('prop_list');
-    res.render('prop', { data });
+    let { offSet, limit } = req.query;
+    offSet = offSet !== 'NaN' ? offSet * 1 : 0;
+    console.log(offSet);
+    limit = limit * 1 + offSet;
+    const data = await linkSql.query_next_until_data('prop_list', 'prop_id', offSet, limit);
+    res.render('prop', { data, offSet });
 });
 
 router.get('/child', async function(req, res, next) {

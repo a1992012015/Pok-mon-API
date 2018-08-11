@@ -106,7 +106,7 @@ module.exports = class RequestMove extends GetDataShared {
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail'];
                 param = this.setParam(childList, param);
                 // 插入数据库
-                // this.append_data(addSql, param);
+                this.append_data(addSql, param);
                 data.info.push(childList);
             }
         }

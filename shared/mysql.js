@@ -56,7 +56,6 @@ module.exports = class ServicesMysql {
                     return;
                 }
                 console.log('--------------------------SELECT----------------------------');
-                // console.log('------------------------------------------------------------\n\n');
                 resolve(result);
             });
         }).catch(error => {

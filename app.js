@@ -67,7 +67,6 @@ app.use('/move', moveRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    console.log('是否启动');
     res.render('404');
     // next(createError(404));
 });

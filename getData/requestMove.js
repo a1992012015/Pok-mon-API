@@ -58,7 +58,7 @@ module.exports = class RequestMove extends GetDataShared {
         const child = $(brother).next();
         // 判断是否查找到了子级目标
         if ($(child).prop("tagName") === 'TABLE') {
-            console.log(`=================================---${text}=================================`);
+            console.log(`=================================${text}=================================`);
             return this.getData($, child, text);
         } else {
             return false;
@@ -152,18 +152,15 @@ module.exports = class RequestMove extends GetDataShared {
     moveDetail($) {
         const table = $('.roundy.a-r.at-c');
         const TR = table.find('tr');
-        console.log('=======================');
         const info = {};
         for (let i = 0; i < TR.length; i++) {
             if (i === 1) {
-                console.log($(TR[i]).text().trim());
                 info['info'] = $(TR[i]).text().trim();
             } else if (i === 3) {
                 const TABLE = $(TR[i]).find('table');
                 $(TABLE).removeAttr('width');
                 $(TABLE).removeAttr('style');
                 this.removeAttrName($, TABLE);
-                console.log(TABLE.html());
                 info['detail'] = TABLE.html($(TABLE)).html();
             }
         }

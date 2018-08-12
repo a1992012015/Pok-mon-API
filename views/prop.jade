@@ -16,11 +16,11 @@ block content
     div.Jump
         div.left
             if (data.ability_id !== 1)
-                a(href= `/prop?offSet=${data.length - 11}&limit=9`)= '上一个'
+                a(href= `/prop?offSet=${offSet- 10}&limit=10`)= '上一个'
             else
                 p= '这是第一条数据'
         div.right
             if (!lastFlag)
-                a(href= `/prop?offSet=${offSet + 10}&limit=9`)= '下一个'
+                a(href= `/prop?offSet=${offSet + 10}&limit=10`)= '下一个'
             else
                 p= '这是最后一条数据'

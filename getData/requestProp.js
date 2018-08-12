@@ -22,6 +22,7 @@ module.exports = class RequestProp extends GetDataShared {
      * @desc 启动和接受返回结果
      */
     async start() {
+        console.log('开始查找道具');
         const $ = await this.startRequest(url, );
         this.proving($);
     }
@@ -34,15 +35,10 @@ module.exports = class RequestProp extends GetDataShared {
      */
     async proving($) {
         const title = $('.mw-parser-output').find('h4,h3,h2');
-        const list = [];
         for (let a = 0; a < title.length; a++) {
             const text = $(title[a]).text().trim().toString();
-            const data = await this.appoint($, title[a], text);
-            if (data) {
-                list.push(data);
-            }
+            await this.appoint($, title[a], text);
         }
-        return list;
     }
 
     /**
@@ -58,15 +54,12 @@ module.exports = class RequestProp extends GetDataShared {
         // 判断是否查找到了子级目标
         if (child.length) {
             if ($(child).prop("tagName") === 'TABLE') {
-                console.log(`=================================${propIndex}---${text}=================================`);
-                return this.getData($, child, text);
+                this.getData($, child);
             } else if($(child).prop("tagName") === 'H4' || $(child).prop("tagName") === 'H3') {
-                return false;
+
             } else {
-                return this.appoint($, child, text);
+                this.appoint($, child, text);
             }
-        } else {
-            return false;
         }
     }
 
@@ -74,16 +67,11 @@ module.exports = class RequestProp extends GetDataShared {
      * @method
      * @param {function} $ html解析的返回对象
      * @param {jQuery} table 上一个兄弟元素，列表的标题元素
-     * @param {string} text 上一个兄弟元素，列表的标题元素
      * @returns {object} 返回爬取的所有数据
      * @desc 爬取每个列表的每条数据
      */
-    async getData($, table, text) {
+    async getData($, table) {
         const TR = $(table).find('tr');
-        const data = {
-            name: text,
-            info: [],
-        };
         for (let i = 0; i < TR.length; i++) {
             const TD = $(TR[i]).find('td');
             const abilityList = {};
@@ -116,11 +104,10 @@ module.exports = class RequestProp extends GetDataShared {
                 param = this.setParam(abilityList, param);
                 // 插入数据库
                 this.append_data(addSql, param);
+                console.log(`=================================${propIndex}---${abilityList[this.getName(1)]}=================================`);
                 propIndex++;
-                data['info'].push(abilityList);
             }
         }
-        return data.info.length > 0 ? data : false;
     }
 
     /**

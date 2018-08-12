@@ -6,7 +6,6 @@
  */
 'use strict';
 
-const fs = require("fs");
 const GetDataShared = require('./getDataShared');
 
 const url = '/wiki/%E6%8B%9B%E5%BC%8F%E5%88%97%E8%A1%A8';
@@ -34,34 +33,26 @@ module.exports = class RequestMove extends GetDataShared {
      */
     async proving($) {
         const title = $('h2');
-        const list = [];
         for (let i = 0; i < title.length; i++) {
             const text = $(title[i]).text().toString();
             if (text.indexOf('世代') !== -1) {
-                const data = await this.appoint($, title[i], text);
-                list.push(data);
+                await this.appoint($, title[i]);
             }
         }
-        fs.existsSync('move.json') || fs.mkdirSync('move.json');
-        return list;
     }
 
     /**
      * @method
      * @param {function} $ html解析的返回对象
      * @param {jQuery} brother 上一个兄弟元素，列表的标题元素
-     * @param {string} text table的名字
      * @returns {boolean || object} 没有数据可以爬取 || 返回爬取的所有数据
      * @desc 查找table列表是否存在，存在则作为新的数据起点
      */
-    appoint($, brother, text) {
+    appoint($, brother) {
         const child = $(brother).next();
         // 判断是否查找到了子级目标
         if ($(child).prop("tagName") === 'TABLE') {
-            console.log(`=================================${text}=================================`);
-            return this.getData($, child, text);
-        } else {
-            return false;
+            this.getData($, child);
         }
     }
 
@@ -69,17 +60,11 @@ module.exports = class RequestMove extends GetDataShared {
      * @method
      * @param {function} $ html解析的返回对象
      * @param {jQuery} table 上一个兄弟元素，列表的标题元素
-     * @param {string} text 上一个兄弟元素，列表的标题元素
      * @returns {object} 返回爬取的所有数据
      * @desc 爬取每个列表的每条数据
      */
-    async getData($, table, text) {
+    async getData($, table) {
         const TR = $(table).find('tr');
-        const data = {
-            name: text,
-            info: [],
-        };
-
         for (let i = 0; i < TR.length; i++) {
             const TD = $(TR[i]).find('td');
             const childList = {};
@@ -87,11 +72,19 @@ module.exports = class RequestMove extends GetDataShared {
                 for (let a = 0; a < TD.length; a++) {
                     const childText = $(TD[a]).text().trim().toString();
                     if (a === 1) {
-                        const href = $(TD[a]).find('a').attr('href').toString();
+                        let href;
+                        const tagA = $(TD[a]).find('a');
+                        if (tagA.length > 1) {
+                            href = $(tagA).eq(1).attr('href').toString();
+                        } else {
+                            href = $(tagA).attr('href').toString();
+                        }
+
                         const chile$ = await this.startRequest(href);
-                        const { info, detail } = this.moveDetail(chile$);
+                        const { info, detail, detail_info } = this.moveDetail(chile$);
                         childList['info'] = info;
                         childList['detail'] = detail;
+                        childList['detail_info'] = detail_info;
                         childList[this.getName(a)] = childText;
                     } else if (a === 4) {
                         childList[this.getName(a)] = this.type(childText);
@@ -101,15 +94,14 @@ module.exports = class RequestMove extends GetDataShared {
                         childList[this.getName(a)] = childText;
                     }
                 }
-                const  addSql = 'INSERT INTO move_list(move_id, china_name, japan_name, english_name, type, damage, power, accuracy, power_point, info, detail) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), type = VALUES(type), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail)';
-                let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail'];
+                const  addSql = 'INSERT INTO move_list(move_id, china_name, japan_name, english_name, type, damage, power, accuracy, power_point, info, detail, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), type = VALUES(type), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail), detail_info = VALUES(detail_info)';
+                let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail', 'detail_info'];
                 param = this.setParam(childList, param);
                 // 插入数据库
                 this.append_data(addSql, param);
-                data.info.push(childList);
+                console.log(`=======================================${childList[this.getName(1)]}=======================================`)
             }
         }
-        return data;
     }
 
     /**
@@ -164,9 +156,26 @@ module.exports = class RequestMove extends GetDataShared {
                 info['detail'] = TABLE.html($(TABLE)).html();
             }
         }
+        info['detail_info'] = this.provingChild($);
         return info;
     }
 
+    /**
+     * @method
+     * @param {function} $ html解析的返回对象
+     * @returns {string} 子级页面返回的信息
+     * @desc 查找子级页面，根据需要查询的标签和文字，确定坐标，返回一段html
+     */
+    provingChild($) {
+        return this.defineAddress($, 'h2,h3', '招式附加效果');
+    }
+
+    /**
+     * @method
+     * @param {function} $ html解析的返回对象
+     * @param {jQuery} table html解析的返回对象
+     * @desc 删除节点上无用的类名和属性
+     */
     removeAttrName($, table) {
         const tableTr = $(table).find('tr');
         for (let a = 0; a < tableTr.length; a++) {
@@ -174,8 +183,8 @@ module.exports = class RequestMove extends GetDataShared {
             $(tableTr[a]).removeAttr('style');
             if ($(tableTr[a]).find('ul').length > 0) {
                 const tableTrUl = $(tableTr[a]).find('ul');
-                tableTrUl.find('td').removeAttr('width');
-                tableTrUl.find('td').removeAttr('style');
+                $(tableTr[a]).find('td').removeAttr('class');
+                $(tableTr[a]).find('td').removeAttr('style');
                 const tableTrUlLi = $(tableTrUl).find('li');
                 for (let b = 0; b < tableTrUlLi.length; b++) {
                     $(tableTrUlLi[b]).html($(tableTrUlLi[b]).text().trim());

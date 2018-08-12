@@ -33,14 +33,12 @@ module.exports = class RequestAbility extends GetDataShared {
      */
     async proving($) {
         const title = $('h2');
-        const list = {};
         for (let a = 0; a < title.length; a++) {
             const text = $(title[a]).text();
             if (text.indexOf('特性') !== -1) {
-                list[`ability-${a}`] = await this.requestDate($, title[a], a + 3);
+                await this.requestDate($, title[a], a + 3);
             }
         }
-        return list;
     }
 
     /**
@@ -53,7 +51,6 @@ module.exports = class RequestAbility extends GetDataShared {
      */
     async requestDate($, table, generation) {
         const tableList = $(table).next();
-        const data = [];
         const tr = $(tableList).find('tr');
         for (let a = 0; a < tr.length; a++) {
             const td = $(tr[a]).find('td');
@@ -76,10 +73,8 @@ module.exports = class RequestAbility extends GetDataShared {
                 // 插入数据库
                 this.append_data(addSql, param);
                 console.log(`========================================${abilityList[this.getName(0)]}--${abilityList[this.getName(1)]}========================================`);
-                data.push(abilityList);
             }
         }
-        return data;
     }
 
     /**

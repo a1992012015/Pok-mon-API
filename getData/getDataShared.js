@@ -84,7 +84,7 @@ module.exports = class GetDataShared extends Mysql {
                 if (!error && response.statusCode === 200) {
                     const path = os.type().indexOf('Windows') !== -1 ?
                         // windows电脑
-                        `C:/Users/45513/Pictures/images`
+                        `C:/Users/Administrator/Pictures/images`
                         :
                         // linux电脑
                         `/home/ftpuser/www/pokemon/prop`;

@@ -1,0 +1,26 @@
+{
+  "name": "Pokémon",
+  "script": "./bin/www",
+  "cwd": "./",
+  "watch": [
+    "bin",
+    "getData",
+    "public",
+    "routers",
+    "shared",
+    "view",
+    "app.js"
+  ],
+  "ignore_watch": [
+    "node_modules",
+    "log"
+  ],
+  "watch_options": {
+    "followSymlinks": false
+  },
+  "error_file": "./log/app-err.log",
+  "out_file": "./log/app-out.log",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

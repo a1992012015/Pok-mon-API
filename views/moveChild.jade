@@ -12,12 +12,12 @@ block content
     div.Jump
         div.left
             if (data.move_id !== 1)
-                a(href= `/prop/child?id=${data.move_id - 1}`)= '上一个'
+                a(href= `/move/child?id=${data.move_id - 1}`)= '上一个'
             else
                 p= '这是第一条数据'
         div.right
             if (!lastFlag)
-                a(href= `/prop/child?id=${data.move_id + 1}`)= '下一个'
+                a(href= `/move/child?id=${data.move_id + 1}`)= '下一个'
             else
                 p= '这是最后一条数据'
 
@@ -35,19 +35,41 @@ block content
 
     div.text
         p= '英文名称'
-        p= data.type
+        p= data.english_name
 
     div.text
         p= '属性'
-        p= data.damage
+        case data.type
+            when '0': p 一般
+            when '1': p 火
+            when '2': p 虫
+            when '3': p 水
+            when '4': p 毒
+            when '5': p 电
+            when '6': p 飞行
+            when '7': p 草
+            when '8': p 地面
+            when '9': p 冰
+            when '10': p 格斗
+            when '11': p 超能力
+            when '12': p 岩石
+            when '13': p 幽灵
+            when '14': p 龙
+            when '15': p 恶
+            when '16': p 钢
+            when '17': p 妖精
+            default: p ???
 
     div.text
         p= '分类'
-        p= data.power
+        case data.type
+            when '0': p 物理
+            when '1': p 特殊
+            default: p 变化
 
     div.text
         p= '威力'
-        p= data.english_name
+        p= data.power
 
     div.text
         p= '命中'
@@ -61,4 +83,4 @@ block content
         p= '游戏中描述'
         p= data.info
 
-    div!= data.detail
+    div.table!= data.detail

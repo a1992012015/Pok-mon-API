@@ -101,7 +101,6 @@ module.exports = class RequestMove extends GetDataShared {
                         childList[this.getName(a)] = childText;
                     }
                 }
-                // console.log(childList);
                 const  addSql = 'INSERT INTO move_list(move_id, china_name, japan_name, english_name, type, damage, power, accuracy, power_point, info, detail) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), type = VALUES(type), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail)';
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail'];
                 param = this.setParam(childList, param);
@@ -161,9 +160,44 @@ module.exports = class RequestMove extends GetDataShared {
                 info['info'] = $(TR[i]).text().trim();
             } else if (i === 3) {
                 const TABLE = $(TR[i]).find('table');
+                $(TABLE).removeAttr('width');
+                $(TABLE).removeAttr('style');
+                this.removeAttrName($, TABLE);
+                console.log(TABLE.html());
                 info['detail'] = TABLE.html($(TABLE)).html();
             }
         }
         return info;
+    }
+
+    removeAttrName($, table) {
+        const tableTr = $(table).find('tr');
+        for (let a = 0; a < tableTr.length; a++) {
+            $(tableTr[a]).removeAttr('class');
+            $(tableTr[a]).removeAttr('style');
+            if ($(tableTr[a]).find('ul').length > 0) {
+                const tableTrUl = $(tableTr[a]).find('ul');
+                tableTrUl.find('td').removeAttr('width');
+                tableTrUl.find('td').removeAttr('style');
+                const tableTrUlLi = $(tableTrUl).find('li');
+                for (let b = 0; b < tableTrUlLi.length; b++) {
+                    $(tableTrUlLi[b]).html($(tableTrUlLi[b]).text().trim());
+                }
+            } else {
+                const tableTrTd = $(tableTr[a]).find('td,th');
+                for (let b = 0; b < tableTrTd.length; b++) {
+                    $(tableTrTd[b]).removeAttr('width');
+                    $(tableTrTd[b]).removeAttr('class');
+                    $(tableTrTd[b]).removeAttr('style');
+                    let text;
+                    if ($(tableTrTd[b]).text().trim() === '{{{priority}}}') {
+                        text = 0;
+                    } else {
+                        text = $(tableTrTd[b]).text().trim();
+                    }
+                    $(tableTrTd[b]).html(text);
+                }
+            }
+        }
     }
 };

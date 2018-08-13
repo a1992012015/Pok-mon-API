@@ -14,6 +14,7 @@ module.exports = class RequestMove extends GetDataShared {
 
     constructor() {
         super();
+        this.InjuryMultiple('1', '1', '1');
     }
 
     /**
@@ -79,7 +80,6 @@ module.exports = class RequestMove extends GetDataShared {
                         } else {
                             href = $(tagA).attr('href').toString();
                         }
-
                         const chile$ = await this.startRequest(href);
                         const { info, detail, detail_info } = this.moveDetail(chile$);
                         childList['info'] = info;
@@ -98,7 +98,7 @@ module.exports = class RequestMove extends GetDataShared {
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail', 'detail_info'];
                 param = this.setParam(childList, param);
                 // 插入数据库
-                this.append_data(addSql, param);
+                // this.append_data(addSql, param);
                 console.log(`=======================================${childList[this.getName(1)]}=======================================`)
             }
         }

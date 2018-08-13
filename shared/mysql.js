@@ -72,7 +72,8 @@ module.exports = class ServicesMysql {
      * @desc 根据列表名和和参数名和id查询指定数据
      */
     query_specify_data (listName, paramName, id) {
-        const  sql = `SELECT * FROM ${listName} WHERE ${paramName}=${id}`;
+        const  sql = `SELECT * FROM ${listName} WHERE ${paramName}='${id}'`;
+        console.log(sql);
         //查询数据库
         return new Promise((resolve, reason) => {
             connection.query(sql, function (err, result) {
@@ -98,7 +99,6 @@ module.exports = class ServicesMysql {
      * @desc 查询介于两个参数之间的数据
      */
     query_next_until_data (listName, paramName, startId, endId) {
-        // const  sql = `SELECT * FROM ${listName} WHERE ${paramName}=${startId}`;
         const sql = `SELECT * FROM ${listName} WHERE ${paramName} BETWEEN ${startId} AND ${endId};`;
         //查询数据库
         return new Promise((resolve, reason) => {

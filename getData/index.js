@@ -8,15 +8,15 @@
 
 const RequestAbility = require("./requestAbility");// 爬取特性列表信息
 const RequestProp = require("./requestProp");// 爬取道具列表
-const RequestMove = require("./requestMove");// 爬取道具列表
+const RequestItem = require("./requestItem");// 爬取道具列表
 
-const requestMove = new RequestMove();
+const requestItem = new RequestItem();
 const requestAbility = new RequestAbility();
 const requestProp = new RequestProp();
 
 module.exports = (time = 604800000) => {
     let index = 0;
-    requestMove.start().catch(error => console.log(error));
+    requestItem.start().catch(error => console.log(error));
     setInterval(() => {
         switch (index) {
             case 0:
@@ -28,7 +28,7 @@ module.exports = (time = 604800000) => {
                 index++;
                 return;
             default:
-                requestMove.start().catch(error => console.log(error));
+                requestItem.start().catch(error => console.log(error));
                 index = 0;
                 return;
         }

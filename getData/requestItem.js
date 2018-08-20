@@ -10,11 +10,11 @@ const GetDataShared = require('./getDataShared');
 
 const url = '/wiki/%E6%8B%9B%E5%BC%8F%E5%88%97%E8%A1%A8';
 
-module.exports = class RequestMove extends GetDataShared {
+module.exports = class RequestItem extends GetDataShared {
 
     constructor() {
         super();
-        this.InjuryMultiple('1', '1', '1');
+        console.log(this.InjuryMultiple('水', '火'));
     }
 
     /**
@@ -94,7 +94,7 @@ module.exports = class RequestMove extends GetDataShared {
                         childList[this.getName(a)] = childText;
                     }
                 }
-                const  addSql = 'INSERT INTO move_list(move_id, china_name, japan_name, english_name, type, damage, power, accuracy, power_point, info, detail, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), type = VALUES(type), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail), detail_info = VALUES(detail_info)';
+                const  addSql = 'INSERT INTO item_list(item_id, china_name, japan_name, english_name, type, damage, power, accuracy, power_point, info, detail, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), type = VALUES(type), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail), detail_info = VALUES(detail_info)';
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail', 'detail_info'];
                 param = this.setParam(childList, param);
                 // 插入数据库

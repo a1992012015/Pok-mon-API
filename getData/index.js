@@ -8,7 +8,8 @@
 
 const RequestAbility = require("./requestAbility");// 爬取特性列表信息
 const RequestProp = require("./requestProp");// 爬取道具列表
-const RequestItem = require("./requestItem");// 爬取道具列表
+// const RequestItem = require("./requestItem");// 爬取道具列表
+import RequestItem from './requestItem';
 
 const requestItem = new RequestItem();
 const requestAbility = new RequestAbility();

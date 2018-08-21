@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 
+require('babel-core/register'); //让nodeJs支持es6的规范
 var app = require('../app');
 var debug = require('debug')('pok-mon:server');
 var http = require('http');

@@ -10,7 +10,8 @@ const GetDataShared = require('./getDataShared');
 
 const url = '/wiki/%E6%8B%9B%E5%BC%8F%E5%88%97%E8%A1%A8';
 
-module.exports = class RequestItem extends GetDataShared {
+// module.exports = class RequestItem extends GetDataShared {
+export default class RequestItem extends GetDataShared {
 
     constructor() {
         super();

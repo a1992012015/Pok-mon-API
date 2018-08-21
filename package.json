@@ -3,12 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "getDataShared": "node ./getData/getDataShared"
+    "dev": "cross-env NODE_ENV=development supervisor --harmony ./bin/www",
+    "local": "cross-env NODE_ENV=local supervisor --harmony index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production pm2 start index.js --node-args='--harmony' --name 'node-element'",
+    "stop": "cross-env NODE_ENV=production pm2 stop index.js --name 'node-element'",
+    "restart": "cross-env NODE_ENV=production pm2 restart index.js --node-args='--harmony' --name 'node-element'"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "cookie-parser": "~1.4.3",
+    "cross-env": "^5.2.0",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "file-stream-rotator": "^0.2.1",
@@ -17,6 +22,12 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
     "mysql": "^2.16.0",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "supervisor": "^0.12.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0"
   }
 }

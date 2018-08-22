@@ -1,7 +1,11 @@
 /**
- * Created by admin on 2017/9/28 0001.
+ * Created by 圆环之理 on 2018/8/22.
+ *
+ * 功能：
+ *
  */
 'use strict';
+
 import dtime from 'time-formater'; //日期格式化
 import BaseComponent from '../prototype/baseComponent';
 import StatisModel from '../models/statis/statis';

@@ -1,12 +1,12 @@
 /**
  * Created by 圆环之理 on 2018/8/4.
  *
- * 功能：链接Mysql
+ * 功能：Mysql业务
  *
  */
 'use strict';
 
-import db from '../web/mySql/db'
+import db from './db'
 
 export default class ServicesMysql {
 

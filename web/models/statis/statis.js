@@ -1,7 +1,11 @@
 /**
- * Created by admin on 2017/9/28 0014.
+ * Created by 圆环之理 on 2018/8/22.
+ *
+ * 功能：
+ *
  */
 'use strict';
+
 import mySql from 'mysql';
 const Schema = mySql.Schema;
 

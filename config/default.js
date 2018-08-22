@@ -4,6 +4,7 @@
  * 功能：默认配置文件
  *
  */
+'use strict';
 
 module.exports = {
     port: 3000,

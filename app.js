@@ -63,7 +63,7 @@ app.use(expressWinston.logger({
             colorize: true
         }),
         new winston.transports.File({
-            filename: 'logs/' + (new Date().getFullYear()) + '-' + (new Date().getMonth() + 1)  + '-' + (new Date().getDate()) + '-success.log' ////根据日前生成日志成功文件
+            filename: `logs/${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}-success.log` // 根据日期生成日志成功文件
         })
     ]
 }));
@@ -78,7 +78,7 @@ app.use(expressWinston.errorLogger({
             colorize: true
         }),
         new winston.transports.File({
-            filename: 'logs/' + (new Date().getFullYear()) + '-' + (new Date().getMonth() + 1)  + '-' + (new Date().getDate()) + '-error.log' //根据日前生成日志错误文件
+            filename: `logs/${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}-error.log` // 根据日期生成日志错误文件
         })
     ]
 }));

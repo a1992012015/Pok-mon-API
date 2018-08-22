@@ -6,13 +6,13 @@
  */
 'use strict';
 
-const request = require("request");
-const cheerio = require("cheerio");
-const iconv = require("iconv-lite");
-const fs = require("fs");
-const os = require('os');
+import request from 'request';
+import cheerio from 'cheerio';
+import iconv from 'iconv-lite';
+import fs from 'fs';
+import os from 'os';
 
-import ServicesMysql from '../../../shared/mysql';
+import ServicesMysql from '../../mySql/mysql';
 
 // 进攻的伤害
 const attack = [

@@ -1,23 +1,26 @@
 /**
- * Created by 圆环之理 on 2018/8/4.
+ * Created by 圆环之理 on 2018/8/22.
  *
- * 功能：主页面
+ * 功能：接口路由配置页面
  *
  */
 'use strict';
 
-const express = require('express');
-
-import ServicesMysql from '../shared/mysql';
+import express from 'express';
+import ServicesMysql from '../web/mySql/mysql';
+import LogInfo from '../web/util/log4jsUtil';
 
 const router = express.Router({});
 const servicesMysql = new ServicesMysql();
+const log = new LogInfo();
 
 // 该路由使用的中间件
 router.use(function timeLog(req, res, next) {
     console.log('Time: ', Date.now());
+    log.fatal('访问路由接口');
     next();
 });
+
 // 定义网站主页的路由
 router.get('/', function(req, res) {
     res.render('index.jade', { title: 'Express Hello', name: '赵春梅' });

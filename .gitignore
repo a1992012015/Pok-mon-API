@@ -44,5 +44,3 @@ testem.log
 Thumbs.db
 
 # 多余的本地化文件
-/public/images/prop/*.jpg
-/log/*.log

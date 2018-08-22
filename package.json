@@ -6,9 +6,9 @@
     "dev": "cross-env NODE_ENV=development supervisor --harmony ./bin/www",
     "local": "cross-env NODE_ENV=local supervisor --harmony index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_ENV=production pm2 start index.js --node-args='--harmony' --name 'node-element'",
-    "stop": "cross-env NODE_ENV=production pm2 stop index.js --name 'node-element'",
-    "restart": "cross-env NODE_ENV=production pm2 restart index.js --node-args='--harmony' --name 'node-element'"
+    "start": "cross-env NODE_ENV=production pm2 start ./bin/www --node-args='--harmony' --name 'node-element'",
+    "stop": "cross-env NODE_ENV=production pm2 stop ./bin/www --name 'node-element'",
+    "restart": "cross-env NODE_ENV=production pm2 restart ./bin/www --node-args='--harmony' --name 'node-element'"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",

@@ -25,7 +25,7 @@ log4js.configure({
         },//设置是否在控制台打印日志
         info: {
             type: 'file',
-            filename: './logs/info.log'
+            filename:`./logs/${getDateTime()}-info.log`
         }
     },
     categories: {

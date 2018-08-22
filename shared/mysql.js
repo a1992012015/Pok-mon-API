@@ -6,38 +6,9 @@
  */
 'use strict';
 
-const mysql  = require('mysql');
+import db from '../web/mySql/db'
 
-let connection;
-
-function connect () {
-    connection = mysql.createConnection({
-        host: '119.27.168.74',
-        user: 'root',
-        password: 'mengyehuanyu123.',
-        port: '3306',
-        database: 'pokemon',
-    });
-    connection.connect(handleError);
-    connection.on('error', handleError);
-}
-
-// mysql错误处理
-function handleError (err) {
-    if (err) {
-        // 如果是连接断开，自动重新连接
-        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-            connect();
-        } else {
-            console.error(err.stack || err);
-        }
-    }
-}
-
-// 启动连接
-connect();
-
-module.exports = class ServicesMysql {
+export default class ServicesMysql {
 
     constructor() { }
 
@@ -49,7 +20,7 @@ module.exports = class ServicesMysql {
     query_data(listName) {
         const  sql = `SELECT * FROM ${listName}`;
         return new Promise((resolve, reason) => {
-            connection.query(sql, function (err, result) {
+            db.query(sql, function (err, result) {
                 if(err){
                     console.log('[SELECT ERROR] - ', err.message);
                     reason(err.message);
@@ -60,7 +31,6 @@ module.exports = class ServicesMysql {
             });
         }).catch(error => {
             console.log('查询全部的数据=>', error);
-            connect ()
         });
     };
 
@@ -76,7 +46,7 @@ module.exports = class ServicesMysql {
         console.log(sql);
         //查询数据库
         return new Promise((resolve, reason) => {
-            connection.query(sql, function (err, result) {
+            db.query(sql, function (err, result) {
                 if(err){
                     console.log('[SELECT ERROR] - ', err.message);
                     reason(err.message);
@@ -86,7 +56,6 @@ module.exports = class ServicesMysql {
             });
         }).catch(error => {
             console.log('获取指定数据=>', error);
-            connect ()
         });
     };
 
@@ -102,7 +71,7 @@ module.exports = class ServicesMysql {
         const sql = `SELECT * FROM ${listName} WHERE ${paramName} BETWEEN ${startId} AND ${endId};`;
         //查询数据库
         return new Promise((resolve, reason) => {
-            connection.query(sql, function (err, result) {
+            db.query(sql, function (err, result) {
                 if(err){
                     console.log('[SELECT ERROR] - ', err.message);
                     reason(err.message);
@@ -112,7 +81,6 @@ module.exports = class ServicesMysql {
             });
         }).catch(error => {
             console.log('获取指定数据=>', error);
-            connect ()
         });
     };
 
@@ -126,7 +94,7 @@ module.exports = class ServicesMysql {
         const  sql = `SELECT * FROM ${listName} ORDER BY ${paramName} DESC LIMIT 1`;
         //查询数据库
         return new Promise((resolve, reason) => {
-            connection.query(sql, function (err, result) {
+            db.query(sql, function (err, result) {
                 if(err){
                     console.log('[SELECT ERROR] - ', err.message);
                     reason(err.message);
@@ -136,7 +104,6 @@ module.exports = class ServicesMysql {
             });
         }).catch(error => {
             console.log('获取指定数据=>', error);
-            connect ()
         });
     };
 
@@ -148,7 +115,7 @@ module.exports = class ServicesMysql {
      * @desc 根据sql语句插入数据，如果主键已存在就更新数据
      */
     append_data (sql, param) {
-        connection.query(sql, param, function (err, result) {
+        db.query(sql, param, function (err, result) {
             if(err){
                 console.log('[INSERT ERROR] - ',err.message);
                 return;

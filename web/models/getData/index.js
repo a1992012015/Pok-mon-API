@@ -6,17 +6,15 @@
  */
 'use strict';
 
-const RequestAbility = require("./requestAbility");// 爬取特性列表信息
-const RequestProp = require("./requestProp");// 爬取道具列表
-// const RequestItem = require("./requestItem");// 爬取道具列表
-import RequestItem from './requestItem';
+import RequestAbility from './requestAbility';// 爬取特性列表信息
+import RequestProp from './requestProp';// 爬取道具列表
+import RequestItem from './requestItem';// 爬取道具列表
 
 const requestItem = new RequestItem();
 const requestAbility = new RequestAbility();
 const requestProp = new RequestProp();
 
-module.exports = (time = 604800000) => {
-    let index = 0;
+export default (time = 604800000, index = 0) => {
     requestItem.start().catch(error => console.log(error));
     setInterval(() => {
         switch (index) {

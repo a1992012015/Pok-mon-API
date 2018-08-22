@@ -6,12 +6,12 @@
  */
 'use strict';
 
-const GetDataShared = require('./getDataShared');
+import GetDataShared from './getDataShared';
 
 const url = '/wiki/%E9%81%93%E5%85%B7%E5%88%97%E8%A1%A8%EF%BC%88%E4%B8%BB%E7%B3%BB%E5%88%97%EF%BC%89';
 let propIndex = 1;
 
-module.exports = class RequestProp extends GetDataShared {
+export default class RequestProp extends GetDataShared {
 
     constructor() {
         super();

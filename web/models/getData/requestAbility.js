@@ -6,11 +6,11 @@
  */
 'use strict';
 
-const GetDataShared = require('./getDataShared');
+import GetDataShared from './getDataShared';
 
 const url = '/wiki/%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8';
 
-module.exports = class RequestAbility extends GetDataShared {
+export default class RequestAbility extends GetDataShared {
 
     constructor() {
         super();

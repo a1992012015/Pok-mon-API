@@ -12,7 +12,7 @@ const iconv = require("iconv-lite");
 const fs = require("fs");
 const os = require('os');
 
-const Mysql = require('../shared/mysql');
+import ServicesMysql from '../../../shared/mysql';
 
 // 进攻的伤害
 const attack = [
@@ -36,7 +36,7 @@ const attack = [
     [1, 2, 1, 0.5, 1, 1, 1, 1, 0.5, 0.5, 1, 1, 1, 1, 1, 2, 2, 1]
 ];
 
-module.exports = class GetDataShared extends Mysql {
+export default class GetDataShared extends ServicesMysql {
 
     constructor() {
         super();

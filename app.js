@@ -6,80 +6,87 @@
  */
 'use strict';
 
-const createError = require("http-errors");
-const FileStreamRotator = require("file-stream-rotator");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const morgan = require("morgan");
-const fs = require("fs");
+import express from 'express';
+import db from './web/mySql/db.js'
+import config from 'config-lite';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import connectMysql from 'connect-mysql'; //该模块用于将session存入mongo中
+import winston from 'winston'; //日志
+import expressWinston from 'express-winston'; //日志中间插件
+import path from 'path';
+import history from 'connect-history-api-fallback'; //就是让你的单页面路由处理更自然（比如vue-router的mode设置为html5时）参考地址：https://github.com/bripkens/connect-history-api-fallback
+// import Statistic from './web/middlewares/statistic';
+import router from './routes';
 
-// 路由
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const abilityRouter = require("./routes/ability");
-const propRouter = require("./routes/prop");
-const moveRouter = require("./routes/move");
+const defaultConfig = config(__dirname);
 
-// 爬取数据
-const requestData = require("./getData");
+/*// 爬取数据
+import getData from './getData';
 
-requestData();
+getData();*/
 
 const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-// 自定义token
-morgan.token('from', function(req, res){
-    return req.query.from || '-';
+app.all('*',(req, res, next) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Methods','PUT,POST,GET,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Credentials', true); //可以带Cookies
+    res.header('X-Powered-By','3.2.1');
+    if(req.method === 'OPTIONS') {
+        res.send(200);
+    } else {
+        next();
+    }
 });
 
-morgan.format('dev', '[dev] :date[iso] :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms');
+// app.use(Statistic.apiRecord);
+const MysqlStore = connectMysql(session);
+app.use(cookieParser()); //cookie运用
 
-const logDirectory = path.join(__dirname, 'log');
+//session运用
+app.use(session({
+    name: defaultConfig.session.name,
+    secret: defaultConfig.session.secret,
+    resave: true,
+    saveUninitialized: false,
+    cookie: defaultConfig.session.cookie,
+    store: new MysqlStore(defaultConfig.options) // new MysqlStore({url: defaultConfig.url})
+}));
 
-// ensure log directory exists
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+//正确日志
+app.use(expressWinston.logger({
+    transports: [
+        new (winston.transports.Console)({
+            json: true,
+            colorize: true
+        }),
+        new winston.transports.File({
+            filename: 'logs/' + (new Date().getFullYear()) + '-' + (new Date().getMonth() + 1)  + '-' + (new Date().getDate()) + '-success.log' ////根据日前生成日志成功文件
+        })
+    ]
+}));
 
-// create a rotating write stream
-const accessLogStream = FileStreamRotator.getStream({
-    date_format: 'YYYYMMDD',
-    filename: path.join(logDirectory, 'access-%DATE%.log'),
-    frequency: 'daily',
-    verbose: false
-});
+router(app);
 
-app.use(morgan('dev', {stream: accessLogStream}));
+//错误日志
+app.use(expressWinston.errorLogger({
+    transports: [
+        new winston.transports.Console ({
+            json: true,
+            colorize: true
+        }),
+        new winston.transports.File({
+            filename: 'logs/' + (new Date().getFullYear()) + '-' + (new Date().getMonth() + 1)  + '-' + (new Date().getDate()) + '-error.log' //根据日前生成日志错误文件
+        })
+    ]
+}));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/ability', abilityRouter);
-app.use('/prop', propRouter);
-app.use('/move', moveRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    res.render('404');
-    // next(createError('404'));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.use(history());
+app.use(express.static('./public'));
+app.use((err, req, res) => {
+    res.status(404).send('未找到当前路由');
 });
 
 module.exports = app;

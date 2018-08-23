@@ -25,12 +25,12 @@ log4js.configure({
         },//设置是否在控制台打印日志
         info: {
             type: 'file',
-            filename:`./logs/${getDateTime()}-info.log`
+            filename: `./logs/${getDateTime()}-info.log`
         }
     },
     categories: {
         default: {
-            appenders: [ 'out', 'info' ],
+            appenders: ['out', 'info'],
             level: 'info'
         }//去掉'out'。控制台不打印日志
     }
@@ -40,7 +40,8 @@ const logger = log4js.getLogger('info');
 
 export default class LogInfo {
 
-    constructor() {}
+    constructor() {
+    }
 
     /**
      * 正常日志记录
@@ -62,7 +63,7 @@ export default class LogInfo {
      *
      * @param message 日志内容
      */
-    trace(message){
+    trace(message) {
         logger.trace(message);
     };
 
@@ -70,7 +71,7 @@ export default class LogInfo {
      * 告警日志记录
      * @param message 日志内容
      */
-    warn(message){
+    warn(message) {
         logger.warn(message);
     };
 
@@ -78,7 +79,7 @@ export default class LogInfo {
      * 错误日志记录
      * @param message 日志内容
      */
-    error(message){
+    error(message) {
         logger.error(message);
     };
 
@@ -86,7 +87,7 @@ export default class LogInfo {
      *
      * @param message
      */
-    fatal(message){
+    fatal(message) {
         logger.fatal(message);
     };
 }

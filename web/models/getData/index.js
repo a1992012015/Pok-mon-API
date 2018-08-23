@@ -15,7 +15,8 @@ const requestAbility = new RequestAbility();
 const requestProp = new RequestProp();
 
 export default (time = 604800000, index = 0) => {
-    requestItem.start().catch(error => console.log(error));
+    // requestItem.start().catch(error => console.log(error));
+    console.log('开始爬取数据');
     setInterval(() => {
         switch (index) {
             case 0:

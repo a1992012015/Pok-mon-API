@@ -23,7 +23,7 @@ export default class RequestProp extends GetDataShared {
      */
     async start() {
         console.log('开始查找道具');
-        const $ = await this.startRequest(url, );
+        const $ = await this.startRequest(url);
         this.proving($);
     }
 
@@ -55,7 +55,7 @@ export default class RequestProp extends GetDataShared {
         if (child.length) {
             if ($(child).prop("tagName") === 'TABLE') {
                 this.getData($, child);
-            } else if($(child).prop("tagName") === 'H4' || $(child).prop("tagName") === 'H3') {
+            } else if ($(child).prop("tagName") === 'H4' || $(child).prop("tagName") === 'H3') {
 
             } else {
                 this.appoint($, child, text);
@@ -99,7 +99,7 @@ export default class RequestProp extends GetDataShared {
                     abilityList['src'] = await this.savedImg(abilityList['src'], abilityList['englishName']);
                 }
                 abilityList['id'] = propIndex;
-                const  addSql = 'INSERT INTO prop_list(prop_id, china_name, japan_name, english_name, info, detail_info, src) VALUES(?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), info = VALUES(info), detail_info = VALUES(detail_info), src = VALUES(src)';
+                const addSql = 'INSERT INTO prop_list(prop_id, china_name, japan_name, english_name, info, detail_info, src) VALUES(?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), info = VALUES(info), detail_info = VALUES(detail_info), src = VALUES(src)';
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'info', 'detailInfo', 'src'];
                 param = this.setParam(abilityList, param);
                 // 插入数据库

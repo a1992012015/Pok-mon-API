@@ -1,12 +1,9 @@
 /**
- * Created by 圆环之理 on 2018/8/22.
- *
- * 功能：
- *
+ * Created by admin on 2017/9/28 0014.
  */
 'use strict';
-
 import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 const statisSchema = new Schema({
@@ -17,6 +14,6 @@ const statisSchema = new Schema({
 
 statisSchema.index({id: 1});
 
-const Statis = mongoose.model('Statis',statisSchema);
+const Statis = mongoose.model('Statis', statisSchema);
 
 export default Statis;

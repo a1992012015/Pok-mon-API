@@ -10,7 +10,8 @@ import db from './db'
 
 export default class ServicesMysql {
 
-    constructor() { }
+    constructor() {
+    }
 
     /**
      * @method
@@ -18,10 +19,10 @@ export default class ServicesMysql {
      * @desc 根据表名查询数据
      */
     query_data(listName) {
-        const  sql = `SELECT * FROM ${listName}`;
+        const sql = `SELECT * FROM ${listName}`;
         return new Promise((resolve, reason) => {
             db.query(sql, function (err, result) {
-                if(err){
+                if (err) {
                     console.log('[SELECT ERROR] - ', err.message);
                     reason(err.message);
                     return;
@@ -41,13 +42,13 @@ export default class ServicesMysql {
      * @param {string} id 数据库值
      * @desc 根据列表名和和参数名和id查询指定数据
      */
-    query_specify_data (listName, paramName, id) {
-        const  sql = `SELECT * FROM ${listName} WHERE ${paramName}='${id}'`;
+    query_specify_data(listName, paramName, id) {
+        const sql = `SELECT * FROM ${listName} WHERE ${paramName}='${id}'`;
         console.log(sql);
         //查询数据库
         return new Promise((resolve, reason) => {
             db.query(sql, function (err, result) {
-                if(err){
+                if (err) {
                     console.log('[SELECT ERROR] - ', err.message);
                     reason(err.message);
                     return;
@@ -67,12 +68,12 @@ export default class ServicesMysql {
      * @param {Number} endId 数据库值
      * @desc 查询介于两个参数之间的数据
      */
-    query_next_until_data (listName, paramName, startId, endId) {
+    query_next_until_data(listName, paramName, startId, endId) {
         const sql = `SELECT * FROM ${listName} WHERE ${paramName} BETWEEN ${startId} AND ${endId};`;
         //查询数据库
         return new Promise((resolve, reason) => {
             db.query(sql, function (err, result) {
-                if(err){
+                if (err) {
                     console.log('[SELECT ERROR] - ', err.message);
                     reason(err.message);
                     return;
@@ -90,12 +91,12 @@ export default class ServicesMysql {
      * @param {string} paramName 数据库键
      * @desc 根据列表名和和参数名查询最后一条数据
      */
-    query_specify_last (listName, paramName) {
-        const  sql = `SELECT * FROM ${listName} ORDER BY ${paramName} DESC LIMIT 1`;
+    query_specify_last(listName, paramName) {
+        const sql = `SELECT * FROM ${listName} ORDER BY ${paramName} DESC LIMIT 1`;
         //查询数据库
         return new Promise((resolve, reason) => {
             db.query(sql, function (err, result) {
-                if(err){
+                if (err) {
                     console.log('[SELECT ERROR] - ', err.message);
                     reason(err.message);
                     return;
@@ -114,10 +115,10 @@ export default class ServicesMysql {
      * @returns {object} 是否成功
      * @desc 根据sql语句插入数据，如果主键已存在就更新数据
      */
-    append_data (sql, param) {
+    append_data(sql, param) {
         db.query(sql, param, function (err, result) {
-            if(err){
-                console.log('[INSERT ERROR] - ',err.message);
+            if (err) {
+                console.log('[INSERT ERROR] - ', err.message);
                 return;
             }
             console.log('--------------------------INSERT----------------------------');

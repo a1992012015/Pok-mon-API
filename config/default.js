@@ -7,7 +7,7 @@
 'use strict';
 
 module.exports = {
-    port: 3000,
+    port: 27017,
     url: '119.27.168.74',
     session: {
         name: 'SID',

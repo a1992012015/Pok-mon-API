@@ -81,7 +81,7 @@ export default class RequestItem extends GetDataShared {
                             href = $(tagA).attr('href').toString();
                         }
                         const chile$ = await this.startRequest(href);
-                        const { info, detail, detail_info } = this.moveDetail(chile$);
+                        const {info, detail, detail_info} = this.moveDetail(chile$);
                         childList['info'] = info;
                         childList['detail'] = detail;
                         childList['detail_info'] = detail_info;
@@ -94,7 +94,7 @@ export default class RequestItem extends GetDataShared {
                         childList[this.getName(a)] = childText;
                     }
                 }
-                const  addSql = 'INSERT INTO item_list(item_id, china_name, japan_name, english_name, type, damage, power, accuracy, power_point, info, detail, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), type = VALUES(type), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail), detail_info = VALUES(detail_info)';
+                const addSql = 'INSERT INTO item_list(item_id, china_name, japan_name, english_name, type, damage, power, accuracy, power_point, info, detail, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), type = VALUES(type), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail), detail_info = VALUES(detail_info)';
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail', 'detail_info'];
                 param = this.setParam(childList, param);
                 // 插入数据库

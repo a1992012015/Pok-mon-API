@@ -67,7 +67,7 @@ export default class RequestAbility extends GetDataShared {
                     }
                 }
                 abilityList['generation'] = generation;
-                const  addSql = 'INSERT INTO ability_list(ability_id, china_name, japan_name, english_name, generation, info, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), generation = VALUES(generation), info = VALUES(info), detail_info = VALUES(detail_info)';
+                const addSql = 'INSERT INTO ability_list(ability_id, china_name, japan_name, english_name, generation, info, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), generation = VALUES(generation), info = VALUES(info), detail_info = VALUES(detail_info)';
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'generation', 'info', 'detailInfo'];
                 param = this.setParam(abilityList, param);
                 // 插入数据库

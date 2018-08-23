@@ -18,7 +18,7 @@ const db = mysql.createConnection(mySqlLink);
 db.connect(handleError);
 
 // mysql错误处理
-function handleError (err) {
+function handleError(err) {
     if (err) {
         // 如果是连接断开，自动重新连接
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
@@ -42,15 +42,15 @@ db.on('enqueue', function () {
 });
 
 
-db.on('error',function (error) {
-    console.error('mongooDB数据库连接错误：' + error);
-    log.debug('mongooDB数据库连接成功.' + error); //自定义日志存储
+db.on('error', function (error) {
+    console.error('mySql数据库连接错误：' + error);
+    log.debug('mySql数据库连接成功.' + error); //自定义日志存储
     db.connect(handleError);
 });
 
-db.on('end',function () {
-    console.log('mongooDB数据库断开，请重新连接.');
-    log.trace('mongooDB数据库断开，请重新连接.');
+db.on('end', function () {
+    console.log('mySql数据库断开，请重新连接.');
+    log.trace('mySql数据库断开，请重新连接.');
     db.connect(handleError);
 });
 

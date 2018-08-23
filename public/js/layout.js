@@ -9,10 +9,10 @@
 const like = {1: '赵春梅', 2: '李丹', 3: '贺静'};
 console.log(like);
 
-$(function(){
-    $('.name').hover(function(){
-        $(this).css('background-color','yellow');
-    },function(){
-        $(this).css('background-color','transparent');
+$(function () {
+    $('.name').hover(function () {
+        $(this).css('background-color', 'yellow');
+    }, function () {
+        $(this).css('background-color', 'transparent');
     });
 });

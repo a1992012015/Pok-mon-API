@@ -7,7 +7,8 @@
 'use strict';
 
 import express from 'express';
-import db from './web/mySql/db.js'
+import mySqlDb from './web/mySql/db.js';
+import mongodb from './web/mongodb/db.js';
 import config from 'config-lite';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -67,7 +68,7 @@ app.use(expressWinston.logger({
     ]
 }));
 
-router(app);
+app.use('/', router);
 
 //错误日志
 app.use(expressWinston.errorLogger({

@@ -10,7 +10,7 @@ import express from 'express';
 import ServicesMysql from '../web/mySql/mysql';
 import LogInfo from '../web/util/log4jsUtil';
 
-const router = express.Router({});
+const router = express.Router({mergeParams: true});
 const servicesMysql = new ServicesMysql();
 const log = new LogInfo();
 
@@ -79,6 +79,4 @@ router.get('/move/child', async function (req, res) {
     res.render('moveChild.jade', {data, lastFlag});
 });
 
-export default route => {
-    route.use('/', router)
-};
+export default router;

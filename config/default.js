@@ -7,8 +7,9 @@
 'use strict';
 
 module.exports = {
-    port: 27017,
-    url: '119.27.168.74',
+    port: 3000,
+    mongodbPort: 27017,
+    url: 'mongodb://119.27.168.74:27017/Pokemon',
     session: {
         name: 'SID',
         secret: 'SID',

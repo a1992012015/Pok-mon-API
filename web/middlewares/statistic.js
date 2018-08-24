@@ -18,6 +18,7 @@ class Statistic extends BaseComponent {
     }
 
     async apiRecord(req, res, next) {
+        console.log('位置');
         try{
             const statis_id = await this.getId('statis_id');
             const apiInfo = {

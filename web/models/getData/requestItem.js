@@ -14,7 +14,7 @@ export default class RequestItem extends GetDataShared {
 
     constructor() {
         super();
-        console.log(this.InjuryMultiple('水', '火'));
+        console.log('水打火伤害倍数', this.InjuryMultiple('水', '火'));
     }
 
     /**
@@ -98,7 +98,7 @@ export default class RequestItem extends GetDataShared {
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail', 'detail_info'];
                 param = this.setParam(childList, param);
                 // 插入数据库
-                // this.append_data(addSql, param);
+                this.append_data(addSql, param);
                 console.log(`=======================================${childList[this.getName(1)]}=======================================`)
             }
         }

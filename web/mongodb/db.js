@@ -13,7 +13,7 @@ import LogInfo from '../util/log4jsUtil'; //自定义日志文件，后面我们
 const log = new LogInfo();
 const {url, mongodbPort} = config(__dirname);
 
-mongoose.connect(url, {useNewUrlParser:true}).then(err => {
+mongoose.connect(url, {useNewUrlParser: true}).then(err => {
     console.log('qweqwe')
 });
 
@@ -21,7 +21,7 @@ mongoose.Promise = global.Promise;
 
 const db = mongoose.connection;
 
-db.on('open',() => {
+db.once('open',() => {
     console.log('======mongoDB数据库连接成功======');
     log.info('mongoDB数据库连接成功.端口号：' + mongodbPort); //自定义日志存储
 });

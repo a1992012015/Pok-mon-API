@@ -13,7 +13,7 @@ import LogInfo from '../util/log4jsUtil';
 const log = new LogInfo();
 const {mySqlLink, port} = config(__dirname);
 
-const db = mysql.createConnection(mySqlLink);
+const db = mysql.createConnection(mySqlLink.config);
 
 db.connect(handleError);
 

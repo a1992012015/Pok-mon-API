@@ -9,13 +9,15 @@
 import RequestAbility from './requestAbility';// 爬取特性列表信息
 import RequestProp from './requestProp';// 爬取道具列表
 import RequestItem from './requestItem';// 爬取道具列表
+import RequestIllustrations from './requestPokemon';// 爬取道具列表
 
 const requestItem = new RequestItem();
 const requestAbility = new RequestAbility();
 const requestProp = new RequestProp();
+const requestIllustrations = new RequestIllustrations();
 
 export default (time = 604800000, index = 0) => {
-    // requestItem.start().catch(error => console.log(error));
+    requestIllustrations.start().catch(error => console.log(error));
     console.log('开始爬取数据');
     setInterval(() => {
         switch (index) {

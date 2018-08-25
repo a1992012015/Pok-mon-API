@@ -7,14 +7,16 @@
 'use strict';
 
 import GetDataShared from './getDataShared';
+import config from 'config-lite';
 
-const url = '/wiki/%E9%81%93%E5%85%B7%E5%88%97%E8%A1%A8%EF%BC%88%E4%B8%BB%E7%B3%BB%E5%88%97%EF%BC%89';
 let propIndex = 1;
 
 export default class RequestProp extends GetDataShared {
 
     constructor() {
         super();
+        const {urlAbility} = config(__dirname);
+        this.urlProp = urlAbility;
     }
 
     /**
@@ -23,7 +25,7 @@ export default class RequestProp extends GetDataShared {
      */
     async start() {
         console.log('开始查找道具');
-        const $ = await this.startRequest(url);
+        const $ = await this.startRequest(this.urlProp);
         this.proving($);
     }
 

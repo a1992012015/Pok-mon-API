@@ -11,19 +11,19 @@ block content
 
     div.Jump
         div.left
-            if (data.move_id !== 1)
-                a(href= `/move/child?id=${data.move_id - 1}`)= '上一个'
+            if (data.item_id !== 1)
+                a(href= `/move/child?id=${data.item_id - 1}`)= '上一个'
             else
                 p= '这是第一条数据'
         div.right
             if (!lastFlag)
-                a(href= `/move/child?id=${data.move_id + 1}`)= '下一个'
+                a(href= `/move/child?id=${data.item_id + 1}`)= '下一个'
             else
                 p= '这是最后一条数据'
 
     div.text
         p= '特性id'
-        p= data.move_id
+        p= data.item_id
 
     div.text
         p= '中文名称'

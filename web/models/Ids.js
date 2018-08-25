@@ -59,7 +59,7 @@ Ids.findOne((err, data) => {
             statis_id: 0
         });
         newIds.save().then(res => {
-            console.log('创建数据库', res);
+            console.log('插入数据', res);
         }); //保存数据
     }
 });

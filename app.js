@@ -7,7 +7,7 @@
 'use strict';
 
 import express from 'express';
-import mySqlDb from './web/mySql/db.js';
+import mySqldb from './web/mySql/db.js';
 import mongodb from './web/mongodb/db.js';
 import config from 'config-lite';
 import cookieParser from 'cookie-parser';
@@ -21,7 +21,7 @@ import Statistic from './web/middlewares/statistic';
 import router from './routes';
 import getData from './web/models/getData';
 
-const defaultConfig = config(__dirname);
+const {sessions, mySqlLink} = config(__dirname);
 
 // 爬取数据
 getData();
@@ -47,12 +47,12 @@ app.use(cookieParser()); //cookie运用
 
 //session运用
 app.use(session({
-    name: defaultConfig.session.name,
-    secret: defaultConfig.session.secret,
+    name: sessions.name,
+    secret: sessions.secret,
     resave: true,
     saveUninitialized: false,
-    cookie: defaultConfig.session.cookie,
-    store: new MysqlStore(defaultConfig.options) // new MysqlStore({url: defaultConfig.url})
+    cookie: sessions.cookie,
+    store: new MysqlStore(mySqlLink) // new MysqlStore({url: defaultConfig.url})
 }));
 
 //正确日志

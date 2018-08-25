@@ -7,14 +7,14 @@
 'use strict';
 
 import GetDataShared from './getDataShared';
-
-const url = '/wiki/%E6%8B%9B%E5%BC%8F%E5%88%97%E8%A1%A8';
+import config from 'config-lite';
 
 export default class RequestItem extends GetDataShared {
 
     constructor() {
         super();
-        console.log('水打火伤害倍数', this.InjuryMultiple('水', '火'));
+        const {urlAbility} = config(__dirname);
+        this.urlItem = urlAbility;
     }
 
     /**
@@ -22,7 +22,7 @@ export default class RequestItem extends GetDataShared {
      * @desc 启动
      */
     async start() {
-        const $ = await this.startRequest(url);
+        const $ = await this.startRequest(this.urlItem);
         this.proving($);
     }
 

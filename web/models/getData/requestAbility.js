@@ -7,13 +7,14 @@
 'use strict';
 
 import GetDataShared from './getDataShared';
-
-const url = '/wiki/%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8';
+import config from 'config-lite';
 
 export default class RequestAbility extends GetDataShared {
 
     constructor() {
         super();
+        const {urlAbility} = config(__dirname);
+        this.urlAbility = urlAbility;
     }
 
     /**
@@ -21,7 +22,7 @@ export default class RequestAbility extends GetDataShared {
      * @desc 启动和接受返回结果
      */
     async start() {
-        const $ = await this.startRequest(url);
+        const $ = await this.startRequest(this.urlAbility);
         this.proving($);
     }
 

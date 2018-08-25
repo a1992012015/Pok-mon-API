@@ -203,7 +203,9 @@ export default class GetDataShared extends ServicesMysql {
             case '格鬥':
                 return 1;
             case '飞':
+            case '飞行':
             case '飛':
+            case '飛行':
                 return 2;
             case '毒':
                 return 3;

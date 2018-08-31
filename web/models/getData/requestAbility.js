@@ -8,6 +8,7 @@
 
 import GetDataShared from './getDataShared';
 import config from 'config-lite';
+const opencc = require('node-opencc');
 
 export default class RequestAbility extends GetDataShared {
 
@@ -63,8 +64,10 @@ export default class RequestAbility extends GetDataShared {
                             const href = $(td[i]).find('a').attr('href').toString();
                             const child$ = await this.startRequest(href);
                             abilityList['detailInfo'] = this.provingChild(child$);
+                            abilityList[this.getName(i)] = opencc.hongKongToSimplified($(td[i]).text().trim());
+                        } else {
+                            abilityList[this.getName(i)] = $(td[i]).text().trim();
                         }
-                        abilityList[this.getName(i)] = $(td[i]).text().trim();
                     }
                 }
                 abilityList['generation'] = generation;

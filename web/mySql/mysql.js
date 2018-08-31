@@ -40,11 +40,36 @@ export default class ServicesMysql {
      * @param {string} listName 数据库表名称
      * @param {string} paramName 数据库键
      * @param {string} id 数据库值
-     * @desc 根据列表名和和参数名和id查询指定数据
+     * @desc 根据列表名和和参数名和参数查询指定数据
      */
     query_specify_data(listName, paramName, id) {
         const sql = `SELECT * FROM ${listName} WHERE ${paramName}='${id}'`;
         console.log(sql);
+        //查询数据库
+        return new Promise((resolve, reason) => {
+            db.query(sql, function (err, result) {
+                if (err) {
+                    console.log('[SELECT ERROR] - ', err.message);
+                    reason(err.message);
+                    return;
+                }
+                resolve(result);
+            });
+        }).catch(error => {
+            console.log('获取指定数据=>', error);
+        });
+    };
+
+    /**
+     * @method
+     * @param {string} listName 数据库表名称
+     * @param {string} paramName 数据库键
+     * @param {string} id 数据库值
+     * @param {string} fieldName 需要查询的字段名字
+     * @desc 根据列表名和和参数名和参数查询指定字段
+     */
+    query_specify_field(listName, paramName, id, fieldName) {
+        const sql = `SELECT ${fieldName} FROM ${listName} WHERE ${paramName}='${id}'`;
         //查询数据库
         return new Promise((resolve, reason) => {
             db.query(sql, function (err, result) {

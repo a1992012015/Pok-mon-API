@@ -8,13 +8,14 @@
 
 import GetDataShared from './getDataShared';
 import config from 'config-lite';
+const opencc = require('node-opencc');
 
 export default class RequestItem extends GetDataShared {
 
     constructor() {
         super();
-        const {urlAbility} = config(__dirname);
-        this.urlItem = urlAbility;
+        const {urlItem} = config(__dirname);
+        this.urlItem = urlItem;
     }
 
     /**
@@ -37,6 +38,7 @@ export default class RequestItem extends GetDataShared {
         for (let i = 0; i < title.length; i++) {
             const text = $(title[i]).text().toString();
             if (text.indexOf('世代') !== -1) {
+                console.log(text);
                 await this.appoint($, title[i]);
             }
         }
@@ -85,7 +87,7 @@ export default class RequestItem extends GetDataShared {
                         childList['info'] = info;
                         childList['detail'] = detail;
                         childList['detail_info'] = detail_info;
-                        childList[this.getName(a)] = childText;
+                        childList[this.getName(a)] = opencc.hongKongToSimplified(childText);
                     } else if (a === 4) {
                         childList[this.getName(a)] = this.type(childText);
                     } else if (a === 5) {
@@ -94,9 +96,9 @@ export default class RequestItem extends GetDataShared {
                         childList[this.getName(a)] = childText;
                     }
                 }
-                const addSql = 'INSERT INTO item_list(item_id, china_name, japan_name, english_name, type, damage, power, accuracy, power_point, info, detail, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), type = VALUES(type), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail), detail_info = VALUES(detail_info)';
+                const addSql = 'INSERT INTO item_list(item_id, china_name, japan_name, english_name, types, damage, power, accuracy, power_point, info, detail, detail_info) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?) ON DUPLICATE KEY UPDATE china_name = VALUES(china_name), japan_name = VALUES(japan_name), english_name = VALUES(english_name), types = VALUES(types), damage = VALUES(damage), power = VALUES(power), accuracy = VALUES(accuracy), power_point = VALUES(power_point), info = VALUES(info), detail = VALUES(detail), detail_info = VALUES(detail_info)';
                 let param = ['id', 'chinaName', 'japanName', 'englishName', 'type', 'damage', 'power', 'accuracy', 'powerPoint', 'info', 'detail', 'detail_info'];
-                param = this.setParam(childList, param);
+                param = await this.setParam(childList, param);
                 // 插入数据库
                 this.append_data(addSql, param);
                 console.log(`=======================================${childList[this.getName(1)]}=======================================`)

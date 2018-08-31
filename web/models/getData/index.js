@@ -16,21 +16,21 @@ const requestAbility = new RequestAbility();
 const requestProp = new RequestProp();
 const requestIllustrations = new RequestIllustrations();
 
-export default (time = 604800000, index = 0) => {
-    requestIllustrations.start().catch(error => console.log(error));
+export default async function(time = 604800000, index = 0) {// 604800000
     console.log('开始爬取数据');
-    setInterval(() => {
+    await requestIllustrations.start();
+    setInterval(async function() {
         switch (index) {
             case 0:
-                requestAbility.start().catch(error => console.log(error));
+                await requestAbility.start();
                 index++;
                 return;
             case 1:
-                requestProp.start().catch(error => console.log(error));
+                await requestProp.start();
                 index++;
                 return;
             default:
-                requestItem.start().catch(error => console.log(error));
+                await requestItem.start();
                 index = 0;
                 return;
         }

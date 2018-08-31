@@ -8,6 +8,7 @@
 
 import GetDataShared from './getDataShared';
 import config from 'config-lite';
+const opencc = require('node-opencc');
 
 let propIndex = 1;
 
@@ -15,8 +16,8 @@ export default class RequestProp extends GetDataShared {
 
     constructor() {
         super();
-        const {urlAbility} = config(__dirname);
-        this.urlProp = urlAbility;
+        const {urlProp} = config(__dirname);
+        this.urlProp = urlProp;
     }
 
     /**
@@ -89,9 +90,11 @@ export default class RequestProp extends GetDataShared {
                             if (a === 1) {
                                 const href = $(TD[a]).find('a').attr('href').toString();
                                 const chile$ = await this.startRequest(href);
-                                abilityList['detailInfo'] = this.provingChild(chile$)
+                                abilityList['detailInfo'] = this.provingChild(chile$);
+                                abilityList[this.getName(a)] = opencc.hongKongToSimplified($(TD[a]).text().trim());
+                            } else {
+                                abilityList[this.getName(a)] = $(TD[a]).text().trim();
                             }
-                            abilityList[this.getName(a)] = $(TD[a]).text().trim();
                         }
                     }
                 }

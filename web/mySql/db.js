@@ -37,7 +37,6 @@ db.on('connection', function (connection) {
 
 // 队列中等待可用连接的回调函数被触发时
 db.on('enqueue', function () {
-    console.log('======mySql有新的查询======');
     log.info('mySql数据库有新的查询.端口号：' + port); //自定义日志存储
 });
 

@@ -30,7 +30,7 @@ log4js.configure({
     },
     categories: {
         default: {
-            appenders: ['out', 'info'],
+            appenders: ['info'],
             level: 'info'
         }//去掉'out'。控制台不打印日志
     }
